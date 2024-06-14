@@ -4,7 +4,7 @@ rule stringtie_star:
     output:
         config["StringtieStar2AssemblyDir"] + "{sample}" + "_stringtie-star.gtf"
     conda:
-        "../envs/stringtie.yml"
+        "envs/stringtie.yml"
     threads:
         res_config['stringtie']['threads']
     resources:
@@ -22,7 +22,7 @@ rule stringtie_star_merge:
     output:
         config["StringtieStarMergeDir"] + config["speciesname"] + "_stringtie_merge.gtf"
     conda:
-        "../envs/stringtie.yml"
+        "envs/stringtie.yml"
     threads:
         res_config['stringtie_merge']['threads']
     resources:
