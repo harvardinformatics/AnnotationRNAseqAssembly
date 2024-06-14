@@ -5,7 +5,7 @@ rule star_1stpass:
     output:
         config["Star1stPassOutdir"] + "{sample}" + "_STAR1stpassSJ.out.tab"
     conda:
-        "../envs/star.yml"
+        "envs/star.yml"
     threads:
         res_config['star_1stpass']['threads']
     resources:
@@ -29,7 +29,7 @@ rule star_2ndpass:
     output:
         config["Star2ndPassOutdir"] + "{sample}" + "_STAR2ndpassAligned.out.sam"
     conda:
-        "../envs/star.yml"
+        envs/star.yml"
     threads:
         res_config['star_2ndpass']['threads']
     resources:
@@ -54,7 +54,7 @@ rule samsort_star:
     output:
         config["StarSamsortOutdir"] + "sorted_" + "{sample}" + "_STAR2ndpass.bam"
     conda:
-        "../envs/samtools.yml"
+        "envs/samtools.yml"
     threads:
         res_config['samsort']['threads']
     resources:
