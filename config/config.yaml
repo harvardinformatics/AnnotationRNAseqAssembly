@@ -1,28 +1,14 @@
-speciesname: "human"
 
 ########################
 ## RNA-SEQ FASTQ FILES #
 ########################
 
-## Input data type ##
-
-## Illumina short reads ##
-
-fastqDir: "/n/holylfs05/LABS/informatics/Lab/genome_annotation_project/dipterans/fastq/dmel/eval"
+fastqDir: "/n/holylfs05/LABS/informatics/Lab/genome_annotation_project/dipterans/fastq/dmel/eval/"
 
 ## Genome ##
 genome: "/n/holylfs05/LABS/informatics/Lab/genome_annotation_project/dipterans/genomes/dmel/headercleaned_GCF_000001215.4_Release_6_plus_ISO1_MT_genomic.fna"
 
-## STAR index ##
+## STAR ##
 StarIndexDir: "/n/holylfs05/LABS/informatics/Lab/genome_annotation_project/dipterans/genomes/dmel/star/"
-####################
-## Read alignment ##
-####################
-
-#aligner: "STAR" 
-
-#######################
-# Transcript assembly #
-######################
-
-#ssembler: "stringtie"
+Star1stPassOutdir: "results/star/star1stpass/"
+Star2ndPassOutdir: "results/star/star2ndpass/"
