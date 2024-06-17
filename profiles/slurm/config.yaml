@@ -1,0 +1,30 @@
+executor: slurm
+use-conda: True
+jobs: 100
+latency-wait: 100
+retries: 0
+
+set-threads:
+    star_1stpass: 8
+    star_2ndpass: 8
+
+set-nodes:
+    star_1stpass: 1    
+    star_2ndpass: 1
+
+set_resources:
+    # STAR spliced-alignment    
+    star_1stpass:
+        mem_mb: 64000
+        slurm_partition: serial_requeue,shared
+        runtime: 1920
+        output: "logs/star1st-%j.out"
+        error: "logs/star1st-%j.err"
+        job-name: "star1st"
+    star_2ndpass:
+        mem_mb: 64000
+        slurm_partition: serial_requeue,shared
+        runtime: 1920 
+        output: "logs/star2nd-%j.out"
+        error: "logs/star2nd-%j.err"
+        job-name: "star2nd"
