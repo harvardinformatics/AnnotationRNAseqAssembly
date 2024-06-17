@@ -8,22 +8,20 @@ set-threads:
     star_1stpass: 8
     star_2ndpass: 8
 
-set-nodes:
-    star_1stpass: 1    
-    star_2ndpass: 1
-
 set_resources:
     # STAR spliced-alignment    
     star_1stpass:
+        nodes: 1
         mem_mb: 64000
-        slurm_partition: serial_requeue,shared
+        slurm_partition: "shared"
         runtime: 1920
         output: "logs/star1st-%j.out"
         error: "logs/star1st-%j.err"
         job-name: "star1st"
     star_2ndpass:
+        nodes: 1
         mem_mb: 64000
-        slurm_partition: serial_requeue,shared
+        slurm_partition: "shared"
         runtime: 1920 
         output: "logs/star2nd-%j.out"
         error: "logs/star2nd-%j.err"
