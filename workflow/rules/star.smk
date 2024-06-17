@@ -10,6 +10,7 @@ rule star_1stpass:
         indexdir = config["StarIndexDir"]
     shell:
         """
+        rm -rf star2nd/{wildcards.sample}_1stpassSTARtmp
         STAR --runThreadN 8 --genomeDir {params.indexdir} \
         --outFileNamePrefix star1st/{wildcards.sample}_STAR1stpass \
         --outTmpDir star1st/{wildcards.sample}_1stpassSTARtmp \
