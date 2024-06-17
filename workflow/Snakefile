@@ -1,6 +1,11 @@
+from glob import glob
+from os.path import basename
+
 configfile: "config/config.yaml"
 include: "rules/star.smk"
 
+SAMPLES=list(set(basename(i).split('_')[0] for i in glob("%s*_1.fastq.gz" % config["fastqDir"])))
+print(SAMPLES)
 
 rule all:
     input:
