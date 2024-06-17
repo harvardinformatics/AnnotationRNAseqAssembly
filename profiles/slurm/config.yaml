@@ -1,4 +1,4 @@
-executor: slurm
+executor: dryrun
 use-conda: True
 jobs: 100
 latency-wait: 100
