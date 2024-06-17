@@ -4,5 +4,5 @@ include: "rules/star.smk"
 
 rule all:
     input:
-        expand("star2nd/{sample}_STAR2ndpassAligned.out.sam", sample=SAMPLES))
+        expand("star2nd/{sample}_STAR2ndpassAligned.out.sam", sample=SAMPLES)
     default_target: True
