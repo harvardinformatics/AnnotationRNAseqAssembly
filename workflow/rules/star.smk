@@ -10,7 +10,6 @@ rule star_1stpass:
         indexdir = config["StarIndexDir"]
     shell:
         """
-        rm -rf star1st/{wildcards.sample}_1stpassSTARtmp
         STAR --runThreadN 8 --genomeDir {params.indexdir} \
         --outFileNamePrefix star1st/{wildcards.sample}_STAR1stpass \
         --outTmpDir star1st/{wildcards.sample}_1stpassSTARtmp \
@@ -19,16 +18,16 @@ rule star_1stpass:
 
 rule star_2ndpass:
     input:
-        tablelist = expand("star1st/{sample}_STAR1stpassSJ.out.tab", sample=SAMPLES),
+        tablelist = expand("{outdir}{sample}_STAR1stpassSJ.out.tab", outdir=config["Star1stPassOutdir"],sample=SAMPLES),
         r1=config["fastqDir"] + "{sample}" + "_1.fastq.gz",
         r2=config["fastqDir"] + "{sample}" + "_2.fastq.gz"
     output:
         "star2nd/" + "{sample}" + "_STAR2ndpassAligned.out.sam"
     conda:
-        ../envs/star.yml"
+        "../envs/star.yml"
     params:
         indexdir = config["StarIndexDir"],
-        tablestring = ' '.join(expand("star1st/{sample}_STAR1stpassSJ.out.tab", sample=SAMPLES))
+        tablestring = ' '.join(expand("{outdir}{sample}_STAR1stpassSJ.out.tab", outdir=config["Star1stPassOutdir"],sample=SAMPLES))
     shell:
         """
         rm -rf star2nd/{wildcards.sample}_2ndpassSTARtmp
