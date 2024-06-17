@@ -8,19 +8,21 @@ speciesname: "human"
 
 ## Illumina short reads ##
 
-fastqDir: "/n/holylfs05/LABS/informatics/Lab/genome_annotation_project/mammals/fastq/human/trimmed_reads/"
+fastqDir: "/n/holylfs05/LABS/informatics/Lab/genome_annotation_project/dipterans/fastq/dmel/eval"
 
 ## Genome ##
-genome: "/n/holylfs05/LABS/informatics/Lab/genome_annotation_project/mammals/genomes/human/headcleaned_GCF_000001405.39_GRCh38.p13_genomic.fna"
+genome: "/n/holylfs05/LABS/informatics/Lab/genome_annotation_project/dipterans/genomes/dmel/headercleaned_GCF_000001215.4_Release_6_plus_ISO1_MT_genomic.fna"
 
+## STAR index ##
+StarIndexDir: "/n/holylfs05/LABS/informatics/Lab/genome_annotation_project/dipterans/genomes/dmel/star/"
 ####################
 ## Read alignment ##
 ####################
 
-aligner: "STAR" 
+#aligner: "STAR" 
 
 #######################
 # Transcript assembly #
 ######################
 
-assembler: "stringtie"
+#ssembler: "stringtie"
