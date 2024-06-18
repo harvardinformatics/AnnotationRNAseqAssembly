@@ -1,3 +1,9 @@
+def get_splice_tables(sampletable):
+    readin = pd.read_table(sampletable)
+    samples=readin.loc[:,"sampleid"]
+    tables = ["1stpass/%s_STAR1stpassSJ.out.tab" % i for i in samples] 
+    return tables
+
 rule star_1stpass:
     input:
         r1=config["fastqDir"] + "{sample}_1.fastq.gz",
@@ -19,7 +25,7 @@ rule star_1stpass:
 
 rule star_2ndpass:
     input:
-        tablelist = expand("{outdir}{sample}_STAR1stpassSJ.out.tab", outdir=config["Star1stPassOutdir"],sample=SAMPLES),
+        tablelist = get_splice_tables(config["sampleTable"]),
         r1=config["fastqDir"] + "{sample}" + "_1.fastq.gz",
         r2=config["fastqDir"] + "{sample}" + "_2.fastq.gz"
     output:
@@ -28,7 +34,7 @@ rule star_2ndpass:
         "../envs/star.yml"
     params:
         indexdir = config["StarIndexDir"],
-        tablestring = ' '.join(expand("{outdir}{sample}_STAR1stpassSJ.out.tab", outdir=config["Star1stPassOutdir"],sample=SAMPLES))
+        tablestring = " ".join(tablelist)
     shell:
         """
         rm -rf star2nd/{wildcards.sample}_2ndpassSTARtmp
