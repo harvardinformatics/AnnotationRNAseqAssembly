@@ -5,6 +5,8 @@ import pandas as pd
 configfile: "config/config.yaml"
 include: "rules/star.smk"
 
+sampleinfo = pd.read_table(config["sampleTable"])
+SAMPLES=list(sampleinfo.loc[:,"sampleid"])
 
 rule all:
     input:
