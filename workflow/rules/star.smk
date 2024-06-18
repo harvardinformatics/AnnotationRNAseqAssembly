@@ -13,7 +13,7 @@ rule star_1stpass:
         rm -rf star1stpass/{wildcards.sample}_1stpassSTARtmp
         STAR --runThreadN 8 --genomeDir {params.indexdir} \
         --outFileNamePrefix star1stpass/{wildcards.sample}_STAR1stpass \
-        --outTmpDir star1st/{wildcards.sample}_1stpassSTARtmp \
+        --outTmpDir star1stpass/{wildcards.sample}_1stpassSTARtmp \
         --readFilesIn <(gunzip -c {input.r1}) <(gunzip -c {input.r2}) 
         """       
 
@@ -37,5 +37,5 @@ rule star_2ndpass:
         --outTmpDir star2ndpass/{wildcards.sample}_2ndpassSTARtmp \
         --sjdbFileChrStartEnd {params.tablestring} \
         --outFileNamePrefix star2ndpass/{wildcards.sample}_STAR2ndpass \
-        --readFilesIn <(gunzip -c {input.r1} <(gunzip -c {input.r2})
+        --readFilesIn <(gunzip -c {input.r1}) <(gunzip -c {input.r2})
         """
