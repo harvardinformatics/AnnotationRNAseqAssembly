@@ -4,11 +4,9 @@
 ########################
 
 fastqDir: "/n/holylfs05/LABS/informatics/Lab/genome_annotation_project/dipterans/fastq/dmel/eval/"
-
+sampleTable: "/n/holylfs05/LABS/informatics/Lab/genome_annotation_project/repo_tests/annotationrnaseq/AnnotationRNAseqAssembly/sampletable.tsv"
 ## Genome ##
 genome: "/n/holylfs05/LABS/informatics/Lab/genome_annotation_project/dipterans/genomes/dmel/headercleaned_GCF_000001215.4_Release_6_plus_ISO1_MT_genomic.fna"
 
 ## STAR ##
 StarIndexDir: "/n/holylfs05/LABS/informatics/Lab/genome_annotation_project/dipterans/genomes/dmel/star/"
-Star1stPassOutdir: "results/star/star1stpass/"
-Star2ndPassOutdir: "results/star/star2ndpass/"
