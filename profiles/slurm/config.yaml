@@ -8,7 +8,7 @@ set-threads:
     star_1stpass: 8
     star_2ndpass: 8
 
-set_resources:
+set-resources:
     # STAR spliced-alignment    
     star_1stpass:
         nodes: 1
