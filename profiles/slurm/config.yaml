@@ -15,14 +15,14 @@ set-resources:
         mem_mb: 64000
         slurm_partition: "shared"
         runtime: 1920
-        output: "logs/star1st-%j.out"
-        error: "logs/star1st-%j.err"
-        job-name: "star1st"
+        slurm_extra: --output="'logs/star1st-%j.out'"
+        slurm_extra: --error:="'logs/star1st-%j.err'"
+        slurm_extra: --job-name="'star1st'"
     star_2ndpass:
         nodes: 1
         mem_mb: 64000
         slurm_partition: "shared"
-        runtime: 1920 
-        output: "logs/star2nd-%j.out"
-        error: "logs/star2nd-%j.err"
-        job-name: "star2nd"
+        runtime: 1920
+        slurm_extra: --output="'logs/star2nd-%j.out'"
+        slurm_extra: --error:="'logs/star2nd-%j.err'"
+        slurm_extra: --job-name="'star2nd'" 
