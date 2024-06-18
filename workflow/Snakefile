@@ -5,9 +5,8 @@ import pandas as pd
 configfile: "config/config.yaml"
 include: "rules/star.smk"
 
-#SAMPLES=list(set(basename(i).split('_')[0] for i in glob("%s*_1.fastq.gz" % config["fastqDir"])))
 
 rule all:
     input:
-        expand("{outdir}/{sample}_STAR2ndpassAligned.out.sam", outdir=config["Star2ndPassOutdir"],sample=SAMPLES)
+        expand("star2ndpass/{sample}_STAR2ndpassAligned.out.sam",sample=SAMPLES)
     default_target: True
