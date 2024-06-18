@@ -14,7 +14,7 @@ rule star_1stpass:
         STAR --runThreadN 8 --genomeDir {params.indexdir} \
         --outFileNamePrefix star1stpass/{wildcards.sample}_STAR1stpass \
         --outTmpDir star1st/{wildcards.sample}_1stpassSTARtmp \
-        --readFilesIn <(gunzip -c {input.r1}) <(gunzip -c (input.r2}) 
+        --readFilesIn <(gunzip -c {input.r1}) <(gunzip -c {input.r2}) 
         """       
 
 rule star_2ndpass:
@@ -28,7 +28,7 @@ rule star_2ndpass:
         "../envs/star.yml"
     params:
         indexdir = config["StarIndexDir"],
-        tablestring = " ".join({input.tablelist})
+        tablestring = ' '.join(expand("star1stpass/{sample}_STAR1stpassSJ.out.tab", sample=SAMPLES))
     shell:
         """
         rm -rf star2ndpass/{wildcards.sample}_2ndpassSTARtmp

@@ -3,7 +3,6 @@ from os.path import basename
 import pandas as pd
 
 configfile: "config/config.yaml"
-include: "rules/star.smk"
 
 sampleinfo = pd.read_table(config["sampleTable"])
 SAMPLES=list(sampleinfo.loc[:,"sampleid"])
@@ -12,3 +11,6 @@ rule all:
     input:
         expand("star2ndpass/{sample}_STAR2ndpassAligned.out.sam",sample=SAMPLES)
     default_target: True
+
+
+include: "rules/star.smk"
