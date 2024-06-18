@@ -34,7 +34,7 @@ rule star_2ndpass:
         "../envs/star.yml"
     params:
         indexdir = config["StarIndexDir"],
-        tablestring = " ".join(tablelist)
+        tablestring = " ".join(input.tablelist)
     shell:
         """
         rm -rf star2nd/{wildcards.sample}_2ndpassSTARtmp
