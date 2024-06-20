@@ -6,12 +6,13 @@ rule star_1stpass:
         "star1stpass/" + "{sample}" + "_STAR1stpassSJ.out.tab"
     conda:
         "../envs/star.yml"
+    threads: 8
     params:
         indexdir = config["StarIndexDir"]
     shell:
         """
         rm -rf star1stpass/{wildcards.sample}_1stpassSTARtmp
-        STAR --runThreadN 8 --genomeDir {params.indexdir} \
+        STAR --runThreadN {threads} --genomeDir {params.indexdir} \
         --outFileNamePrefix star1stpass/{wildcards.sample}_STAR1stpass \
         --outTmpDir star1stpass/{wildcards.sample}_1stpassSTARtmp \
         --readFilesIn <(gunzip -c {input.r1}) <(gunzip -c {input.r2}) 
@@ -26,13 +27,14 @@ rule star_2ndpass:
         "star2ndpass/" + "{sample}" + "_STAR2ndpassAligned.out.sam"
     conda:
         "../envs/star.yml"
+    threads: 8
     params:
         indexdir = config["StarIndexDir"],
         tablestring = ' '.join(expand("star1stpass/{sample}_STAR1stpassSJ.out.tab", sample=SAMPLES))
     shell:
         """
         rm -rf star2ndpass/{wildcards.sample}_2ndpassSTARtmp
-        STAR --runThreadN 8 \
+        STAR --runThreadN {threads} \
         --genomeDir {params.indexdir} \
         --outTmpDir star2ndpass/{wildcards.sample}_2ndpassSTARtmp \
         --sjdbFileChrStartEnd {params.tablestring} \
