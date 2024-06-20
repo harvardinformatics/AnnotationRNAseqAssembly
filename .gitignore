@@ -7,3 +7,4 @@ trash/*
 stringtie/*
 stringtie_gtflist.txt
 transdecoder/*
+workflow_run.sh
