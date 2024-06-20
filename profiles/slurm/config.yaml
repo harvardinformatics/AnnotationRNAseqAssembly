@@ -38,3 +38,11 @@ set-resources:
         mem_mb: 32000
         slurm_partition: "shared"
         runtime: 720
+    stringtie_merge:
+        nodes: 1
+        ntasks: 1
+        threads: 1
+        mem_mb: 20000
+        slurm_partition: "shared"
+        runtime: 360
+

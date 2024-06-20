@@ -19,15 +19,15 @@ if config["aligner"] in ["STAR","star"]:
 #    default_target: True
 
 
-rule all:
-    input:
-        expand("stringtie/{sample}_stringtie.gtf",sample=SAMPLES)    
-    default_target: True
-
-
 #rule all:
 #    input:
-#        "stringtie_merged/stringtie-star_merge.gtf"
+#        expand("stringtie/{sample}_stringtie.gtf",sample=SAMPLES)    
+#    default_target: True
+
+
+rule all:
+    input:
+        "stringtie/stringtie_merged.gtf"
 
 include: "rules/star.smk"
 include: "rules/stringtie.smk"

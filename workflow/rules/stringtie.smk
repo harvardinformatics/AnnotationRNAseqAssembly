@@ -17,4 +17,19 @@ rule stringtie:
         "../envs/stringtie.yml"
     threads: 16
     shell:
-        "stringtie {input} -p {threads} -o {output}"       
+        "stringtie {input} -p {threads} -o {output}"
+
+rule stringtie_merge:
+    input:
+        expand("stringtie/{sample}_stringtie.gtf",sample=SAMPLES)
+    output:
+        "stringtie/stringtie_merged.gtf"
+    conda:
+        "../envs/stringtie.yml"
+    threads: 1
+    shell:
+       """
+       rm -f stringtie_gtflist.txt
+       for sample in {input}; do echo $sample >> stringtie_gtflist.txt;done
+       stringtie -p {threads} --merge stringtie_gtflist.txt -o stringtie/stringtie_merged.gtf
+       """       
