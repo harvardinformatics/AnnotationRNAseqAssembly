@@ -9,4 +9,5 @@ sampleTable: "sampletable.tsv"
 genome: "/n/holylfs05/LABS/informatics/Lab/genome_annotation_project/dipterans/genomes/dmel/headercleaned_GCF_000001215.4_Release_6_plus_ISO1_MT_genomic.fna"
 
 ## STAR ##
+star_true: 1
 StarIndexDir: "/n/holylfs05/LABS/informatics/Lab/genome_annotation_project/dipterans/genomes/dmel/star/"
