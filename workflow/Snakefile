@@ -15,7 +15,7 @@ if config["aligner"] in ["STAR","star"]:
 
 rule all:
     input:
-        "transdecoder/stringtie_merged.gff3"
+        "transdecoder/stringtie_cdna.fa.transdecoder_dir/longest_orfs.cds.best_candidates.gff3.revised_starts.gff3"
     default_target: True
 
 include: "rules/star.smk"

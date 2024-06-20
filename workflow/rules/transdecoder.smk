@@ -21,3 +21,14 @@ rule convert_gtf2gff3:
     threads: 1
     shell:
         "gtf_to_alignment_gff3.pl {input} > {output}"
+
+rule transdecoder_longorfs:
+    input:
+        "transdecoder/stringtie_cdna.fa"
+    output:
+        "transdecoder/stringtie_cdna.fa.transdecoder_dir/longest_orfs.cds.best_candidates.gff3.revised_starts.gff3"
+    conda:
+        "../envs/transdecoder.yml"
+    threads: 1
+    shell:
+        "TransDecoder.LongOrfs -t {input} -O transdecoder" 
