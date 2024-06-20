@@ -4,5 +4,5 @@ channels:
     - defaults
 
 dependencies:
-    - star==2.7.11b-1
+    - star==2.7.11b
 
