@@ -39,3 +39,17 @@ rule star_2ndpass:
         --outFileNamePrefix star2ndpass/{wildcards.sample}_STAR2ndpass \
         --readFilesIn <(gunzip -c {input.r1}) <(gunzip -c {input.r2})
         """
+
+rule samsort_star:
+    input:
+        "star2ndpass/" + "{sample}" + "_STAR2ndpassAligned.out.sam"
+    output:
+        "star2ndpass/sorted_" + "{sample}" + "_STAR2ndpassAligned.out.bam"
+    conda:
+        "../envs/samtools.yml"
+    threads: 12
+    shell:
+        """
+        rm -f star2ndpass/tmp/{wildcards.sample}.aln.sorted*bam
+        samtools sort -@ {threads} -T star2ndpass/tmp/{wildcards.sample}.aln.sorted -O bam -o {output} {input}
+        """ 
