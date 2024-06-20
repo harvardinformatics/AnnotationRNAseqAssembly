@@ -12,11 +12,15 @@ set-resources:
     # STAR spliced-alignment    
     star_1stpass:
         nodes: 1
+        ntasks: 1
+        threads: 8
         mem_mb: 64000
         slurm_partition: "shared"
         runtime: 1920
     star_2ndpass:
         nodes: 1
+        ntasks: 1
+        threads: 8
         mem_mb: 64000
         slurm_partition: "shared"
         runtime: 1920
@@ -25,4 +29,12 @@ set-resources:
         ntasks: 1
         threads: 12
         mem_mb: 24000
+        slurm_partition: "shared"
         runtime: 360
+    stringtie:
+        nodes: 1
+        ntasks: 1
+        threads: 16
+        mem_mb: 32000
+        slurm_partition: "shared"
+        runtime: 720

@@ -9,12 +9,19 @@ sampleinfo = pd.read_table(config["sampleTable"])
 SAMPLES=list(sampleinfo.loc[:,"sampleid"])
 
 
-if config["star_true"] == 1:
+if config["aligner"] in ["STAR","star"]:
     system("mkdir -p star2ndpass/tmp")
+
+
+#rule all:
+#    input:
+#        expand("star2ndpass/sorted_{sample}_STAR2ndpassAligned.out.bam",sample=SAMPLES)
+#    default_target: True
+
 
 rule all:
     input:
-        expand("star2ndpass/sorted_{sample}_STAR2ndpassAligned.out.bam",sample=SAMPLES)
+        expand("stringtie/{sample}_stringtie.gtf",sample=SAMPLES)    
     default_target: True
 
 
@@ -23,3 +30,4 @@ rule all:
 #        "stringtie_merged/stringtie-star_merge.gtf"
 
 include: "rules/star.smk"
+include: "rules/stringtie.smk"

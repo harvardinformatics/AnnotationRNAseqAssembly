@@ -4,4 +4,4 @@ channels:
     - defaults
 
 dependencies:
-    - stringtie==2.2.2-0,
+    - stringtie==2.2.2
