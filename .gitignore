@@ -1,0 +1,5 @@
+.DS_Store
+.snakemake*
+logs/*
+star1stpass/*
+star2ndpass/*
