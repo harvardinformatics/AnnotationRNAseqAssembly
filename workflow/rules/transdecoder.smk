@@ -26,7 +26,7 @@ rule transdecoder_longorfs:
     input:
         "transdecoder/stringtie_cdna.fa"
     output:
-        "transdecoder/stringtie_cdna.fa.transdecoder_dir/longest_orfs.cds.best_candidates.gff3.revised_starts.gff3"
+        "transdecoder/stringtie_cdna.fa.transdecoder_dir/longest_orfs.pep"
     conda:
         "../envs/transdecoder.yml"
     threads: 1
