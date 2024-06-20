@@ -4,4 +4,4 @@ channels:
     - defaults
 
 dependencies:
-    - transdecoder==5.7.1-0
+    - transdecoder==5.7.1

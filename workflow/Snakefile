@@ -13,21 +13,11 @@ if config["aligner"] in ["STAR","star"]:
     system("mkdir -p star2ndpass/tmp")
 
 
-#rule all:
-#    input:
-#        expand("star2ndpass/sorted_{sample}_STAR2ndpassAligned.out.bam",sample=SAMPLES)
-#    default_target: True
-
-
-#rule all:
-#    input:
-#        expand("stringtie/{sample}_stringtie.gtf",sample=SAMPLES)    
-#    default_target: True
-
-
 rule all:
     input:
-        "stringtie/stringtie_merged.gtf"
+        "transdecoder/stringtie_cdna.fa"
+    default_target: True
 
 include: "rules/star.smk"
 include: "rules/stringtie.smk"
+include: "rules/transdecoder.smk"

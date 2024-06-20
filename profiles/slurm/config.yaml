@@ -45,4 +45,11 @@ set-resources:
         mem_mb: 20000
         slurm_partition: "shared"
         runtime: 360
+    build_transcriptome_fasta:
+        nodes: 1
+        ntasks: 1
+        threads: 1
+        mem_mb: 5000
+        slurm_partition: "shared"
+        runtime: 60
 
