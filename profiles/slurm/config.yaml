@@ -15,10 +15,8 @@ set-resources:
         mem_mb: 64000
         slurm_partition: "shared"
         runtime: 1920
-        slurm_extra: "'--output=logs/star1st-%j.out --error:=logs/star1st-%j.err'"
     star_2ndpass:
         nodes: 1
         mem_mb: 64000
         slurm_partition: "shared"
         runtime: 1920
-        slurm_extra: "'--output=logs/star2nd-%j.out --error:=logs/star2nd-%j.err'"
