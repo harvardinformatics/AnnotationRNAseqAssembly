@@ -20,3 +20,9 @@ set-resources:
         mem_mb: 64000
         slurm_partition: "shared"
         runtime: 1920
+    samsort_star:
+        nodes: 1
+        ntasks: 1
+        threads: 12
+        mem_mb: 24000
+        runtime: 360
