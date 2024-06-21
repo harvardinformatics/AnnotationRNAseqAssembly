@@ -15,7 +15,8 @@ if config["aligner"] in ["STAR","star"]:
 
 rule all:
     input:
-        "transdecoder/stringtie_cdna.fa.transdecoder_dir/longest_orfs.pep"
+        "transdecoder/blastp/subfilelist.txt"
+        #"transdecoder/stringtie_cdna.fa.transdecoder_dir/longest_orfs.pep"
     default_target: True
 
 include: "rules/star.smk"

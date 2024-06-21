@@ -1,3 +1,5 @@
+localrules: split_longestorfs_fasta, make_subfile_list
+
 rule build_transcriptome_fasta:
     input:
         "stringtie/stringtie_merged.gtf"
@@ -32,3 +34,23 @@ rule transdecoder_longorfs:
     threads: 1
     shell:
         "TransDecoder.LongOrfs -t {input} -O transdecoder" 
+
+rule make_subfile_list:
+    input:
+        "transdecoder/stringtie_cdna.fa.transdecoder_dir/longest_orfs.pep"
+        
+    output:
+        "transdecoder/blastp/subfilelist.txt"
+
+    script:
+        "../scripts/makeSubfileList.py"
+
+#rule split_longestorfs_fasta:
+#    input:
+#        "transdecoder/longest_orfs.pep",
+#    output:
+#        blast_inputs = expand("{file}", file = open("transdecoder/blastp/subfilelist.txt").read().splitlines())
+#    shell:
+#        "python workflow/scripts/FastaSplitter.py -f {input.fasta} -maxn 1000 --subfile-list transdecoder/blastp/subfilelist.txt -o transdecoder/blastp"
+         
+     
