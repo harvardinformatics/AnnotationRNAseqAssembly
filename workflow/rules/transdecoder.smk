@@ -38,19 +38,21 @@ rule transdecoder_longorfs:
 rule make_subfile_list:
     input:
         "transdecoder/stringtie_cdna.fa.transdecoder_dir/longest_orfs.pep"
-        
     output:
         "transdecoder/blastp/subfilelist.txt"
-
     script:
         "../scripts/makeSubfileList.py"
 
-#rule split_longestorfs_fasta:
-#    input:
-#        "transdecoder/longest_orfs.pep",
-#    output:
-#        blast_inputs = expand("{file}", file = open("transdecoder/blastp/subfilelist.txt").read().splitlines())
-#    shell:
-#        "python workflow/scripts/FastaSplitter.py -f {input.fasta} -maxn 1000 --subfile-list transdecoder/blastp/subfilelist.txt -o transdecoder/blastp"
-         
-     
+
+rule split_longestorfs_fasta:
+    input:
+        "transdecoder/stringtie_cdna.fa.transdecoder_dir/longest_orfs.pep"
+    output:
+        "transdecoder/blastp/fastasplit.done"
+    conda:
+        "../envs/transdecoder.yml"
+    shell:
+        """
+        python workflow/scripts/FastaSplitter.py -f {input} -maxn 1000 -o transdecoder/blastp
+        touch {output}
+        """

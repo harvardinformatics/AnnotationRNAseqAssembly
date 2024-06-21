@@ -5,3 +5,4 @@ channels:
 
 dependencies:
     - transdecoder==5.7.1
+    - biopython==1.83
