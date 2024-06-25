@@ -50,21 +50,22 @@ checkpoint split_longestorfs_fasta:
     input:
         "transdecoder/stringtie_cdna.fa.transdecoder_dir/longest_orfs.pep"
     output:
-        "transdecoder/blastp/longest_orfs_chunk{chunk}.fasta"
+        directory("transdecoder/blastp/chunks/")
     conda:
         "../envs/transdecoder.yml"
     shell:
         """
-        python workflow/scripts/FastaSplitter.py -f {input} -maxn 1000 -o transdecoder/blastp
+        mkdir -p transdecoder/blastp/chunks
+        python workflow/scripts/FastaSplitter.py -f {input} -maxn 1000 -o {output}
         """
 
 rule blastp_longestorfs:
     input:
-        "transdecoder/blastp/longest_orfs_chunk{chunk}.fasta"
+        "transdecoder/blastp/chunks/longest_orfs_chunk{chunk}.fasta"
     output:
-        "blastp_chunk{chunk}.tsv"
+        "transdecoder/blastp/blastp_chunk{chunk}.tsv"
     conda:
-        "..envs/blast.yml"
+        "../envs/blast.yml"
     threads: 16
     params:
         dbase=config["blastdbase"]
@@ -75,10 +76,9 @@ rule blastp_longestorfs:
         """
 
 def getBlastOutfileList(wildcards):
-    checkpoint_output = checkpoints.split_longestorfs_fasta.get(**wildcards).output[0]
-    return expand("transdecoder/blastp/blastp_chunk{i}.tsv",
-                i=glob_wildcards(checkpoint_output).chunk)
-
+   checkpoint_output = checkpoints.split_longestorfs_fasta.get(**wildcards).output[0]
+   return expand("transdecoder/blastp/blastp_chunk{i}.tsv",
+             i=glob_wildcards(os.path.join(checkpoint_output, "longest_orfs_chunk{i}.fasta")).i)
 
 rule concat_blastp_outputs:
     input:

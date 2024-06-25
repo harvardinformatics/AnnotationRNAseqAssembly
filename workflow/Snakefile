@@ -2,6 +2,7 @@ from glob import glob
 from os.path import basename
 from os import system
 import pandas as pd
+import os.path
 
 configfile: "config/config.yaml"
 

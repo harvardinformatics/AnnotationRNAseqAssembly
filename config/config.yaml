@@ -10,9 +10,9 @@ sampleTable: "sampletable.tsv"
 genome: "data/genome/headercleaned_GCF_000001215.4_Release_6_plus_ISO1_MT_genomic.fna"
 
 ## blast dbase for transdecoder searches ##
-blastdbase: "/data/blast/dipterans_uniprot-trembl.fasta"
+blastdbase: "data/blast/dipterans_uniprot-trembl.fasta"
 
 aligner: STAR
 
 ## STAR ##
-StarIndexDir: "/data/starindex/"
+StarIndexDir: "data/starindex/"

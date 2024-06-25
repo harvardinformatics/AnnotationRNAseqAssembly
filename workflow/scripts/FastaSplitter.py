@@ -12,7 +12,7 @@ if __name__=="__main__":
     
     file_index = 1
     seqcount = 0
-    fout = open('%s/%s_%s.fasta' % (opts.outdir,'.'.join(basename(opts.fastain).split('.')[:-1]),file_index),'w')
+    fout = open('%s/%s_chunk%s.fasta' % (opts.outdir,'.'.join(basename(opts.fastain).split('.')[:-1]),file_index),'w')
 
     for record in SeqIO.parse(opts.fastain,'fasta'):
         if seqcount <=opts.maxn-1:
@@ -21,7 +21,7 @@ if __name__=="__main__":
         else:
             file_index+=1
             fout.close()
-            fout = open('%s/%s_%s.fasta' % (opts.outdir,'.'.join(basename(opts.fastain).split('.')[:-1]),file_index),'w')
+            fout = open('%s/%s_chunk%s.fasta' % (opts.outdir,'.'.join(basename(opts.fastain).split('.')[:-1]),file_index),'w')
             SeqIO.write(record,fout,'fasta')
             seqcount=1 
     
