@@ -4,13 +4,15 @@
 ########################
 
 
-fastqDir: "/n/holylfs05/LABS/informatics/Lab/genome_annotation_project/dipterans/fastq/dmel/eval/"
+fastqDir: "/data/fastq/"
 sampleTable: "sampletable.tsv"
 ## Genome ##
-genome: "/n/holylfs05/LABS/informatics/Lab/genome_annotation_project/dipterans/genomes/dmel/headercleaned_GCF_000001215.4_Release_6_plus_ISO1_MT_genomic.fna"
+genome: "data/genome/headercleaned_GCF_000001215.4_Release_6_plus_ISO1_MT_genomic.fna"
 
+## blast dbase for transdecoder searches ##
+blastdbase: "/data/blast/dipterans_uniprot-trembl.fasta"
 
 aligner: STAR
 
 ## STAR ##
-StarIndexDir: "/n/holylfs05/LABS/informatics/Lab/genome_annotation_project/dipterans/genomes/dmel/star/"
+StarIndexDir: "/data/starindex/"

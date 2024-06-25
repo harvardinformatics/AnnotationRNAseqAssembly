@@ -65,5 +65,13 @@ set-resources:
         threads: 1
         mem_mb: 5000
         slurm_partition: "shared"
-        runtime: 1430       
+        runtime: 1430
+    blastp_longestorfs:
+        nodes: 1
+        ntasks: 1
+        threads: 16
+        mem_mb: 8000
+        slurm_partition: "serial_requeue,shared"
+        runtime: 480
+                
 

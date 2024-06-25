@@ -1,4 +1,12 @@
-localrules: split_longestorfs_fasta, make_subfile_list
+localrules: concat_blastp_outputs, split_longestorfs_fasta
+
+def getFileList(filelist):
+    fopen=open(filelist,'r')
+    filelist = []
+    for line in fopen:
+        filelist.append(line.strip())
+    return filelist
+
 
 rule build_transcriptome_fasta:
     input:
@@ -33,26 +41,49 @@ rule transdecoder_longorfs:
         "../envs/transdecoder.yml"
     threads: 1
     shell:
-        "TransDecoder.LongOrfs -t {input} -O transdecoder" 
+        """
+        rm -rf transdecoder/stringtie_cdna.fa.transdecoder_dir/ 
+        TransDecoder.LongOrfs -t {input} -O transdecoder
+        """
 
-rule make_subfile_list:
+checkpoint split_longestorfs_fasta:
     input:
         "transdecoder/stringtie_cdna.fa.transdecoder_dir/longest_orfs.pep"
     output:
-        "transdecoder/blastp/subfilelist.txt"
-    script:
-        "../scripts/makeSubfileList.py"
-
-
-rule split_longestorfs_fasta:
-    input:
-        "transdecoder/stringtie_cdna.fa.transdecoder_dir/longest_orfs.pep"
-    output:
-        "transdecoder/blastp/fastasplit.done"
+        "transdecoder/blastp/longest_orfs_chunk{chunk}.fasta"
     conda:
         "../envs/transdecoder.yml"
     shell:
         """
         python workflow/scripts/FastaSplitter.py -f {input} -maxn 1000 -o transdecoder/blastp
-        touch {output}
         """
+
+rule blastp_longestorfs:
+    input:
+        "transdecoder/blastp/longest_orfs_chunk{chunk}.fasta"
+    output:
+        "blastp_chunk{chunk}.tsv"
+    conda:
+        "..envs/blast.yml"
+    threads: 16
+    params:
+        dbase=config["blastdbase"]
+    shell:
+        """
+        blastp -max_target_seqs 5 -num_threads 16  -evalue 1e-4 \
+        -query {input} -outfmt 6 -db {params.dbase} > {output}
+        """
+
+def getBlastOutfileList(wildcards):
+    checkpoint_output = checkpoints.split_longestorfs_fasta.get(**wildcards).output[0]
+    return expand("transdecoder/blastp/blastp_chunk{i}.tsv",
+                i=glob_wildcards(checkpoint_output).chunk)
+
+
+rule concat_blastp_outputs:
+    input:
+        getBlastOutfileList
+    output:
+        "transdecoder/blastp/longorfs_blastp_concat.tsv"
+    shell:
+        "cat {input} > {output}" 
