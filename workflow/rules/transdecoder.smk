@@ -78,4 +78,7 @@ rule concat_blastp_outputs:
     output:
         "transdecoder/blastp/longorfs_blastp_concat.tsv"
     shell:
-        "cat {input} > {output}" 
+        """
+        cat {input} > {output}
+        rm {input}
+        """ 
