@@ -1,13 +1,5 @@
 localrules: concat_blastp_outputs, split_longestorfs_fasta
 
-def getFileList(filelist):
-    fopen=open(filelist,'r')
-    filelist = []
-    for line in fopen:
-        filelist.append(line.strip())
-    return filelist
-
-
 rule build_transcriptome_fasta:
     input:
         "stringtie/stringtie_merged.gtf"
