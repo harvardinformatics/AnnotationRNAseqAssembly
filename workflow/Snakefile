@@ -16,10 +16,7 @@ if config["aligner"] in ["STAR","star"]:
 
 rule all:
     input:
-        #"transdecoder/blastp/fastasplit.done",
-        #"transdecoder/stringtie_merged.gff3",
-        #"transdecoder/blastp/subfilelist.txt",
-        "transdecoder/blastp/longorfs_blastp_concat.tsv"
+        "transdecoder/stringtie_transdecoder_genomecoords.gff3"
     default_target: True
 
 include: "rules/star.smk"

@@ -73,5 +73,12 @@ set-resources:
         mem_mb: 8000
         slurm_partition: "serial_requeue,shared"
         runtime: 480
+    transdecoder_predict:
+        nodes: 1
+        ntasks: 1
+        threads: 1
+        mem_mb: 15000
+        slurm_partition: "serial_requeue,shared"
+        runtime: 960
                 
 

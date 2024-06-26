@@ -1,4 +1,4 @@
-localrules: concat_blastp_outputs, split_longestorfs_fasta
+localrules: transdecoder_orfs2genomegff3,concat_blastp_outputs, split_longestorfs_fasta
 
 rule build_transcriptome_fasta:
     input:
@@ -81,4 +81,31 @@ rule concat_blastp_outputs:
         """
         cat {input} > {output}
         rm {input}
-        """ 
+        """
+
+rule transdecoder_predict:
+    input:
+        stringtie_fasta="transdecoder/stringtie_cdna.fa",
+        blasthits="transdecoder/blastp/longorfs_blastp_concat.tsv" 
+    output:
+        "transdecoder/stringtie_cdna.fa.transdecoder.gff3"
+    conda:
+        "../envs/transdecoder.yml"
+    shell:
+        "TransDecoder.Predict -t {input.stringtie_fasta} --single_best_only --retain_blastp_hits {input.blasthits} -O transdecoder" 
+
+rule transdecoder_orfs2genomegff3:
+    input:
+        cdnagff3="transdecoder/stringtie_cdna.fa.transdecoder.gff3",
+        stiegff3="transdecoder/stringtie_merged.gff3",
+        tsfasta="transdecoder/stringtie_cdna.fa"
+    output:
+        "transdecoder/stringtie_transdecoder_genomecoords.gff3"    
+    conda:
+        "../envs/transdecoder.yml"
+    shell:
+        """
+        cdna_alignment_orf_to_genome_orf.pl {input.cdnagff3} \
+        {input.stiegff3} {input.tsfasta} > {output}
+        """
+           
