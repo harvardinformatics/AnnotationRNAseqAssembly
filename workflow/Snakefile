@@ -14,11 +14,20 @@ if config["aligner"] in ["STAR","star"]:
     system("mkdir -p star2ndpass/tmp")
 
 
-rule all:
-    input:
-        "transdecoder/stringtie_transdecoder_genomecoords.gff3"
-    default_target: True
+if config["include_ncrnas"] ==True:
+    rule all:
+        input:
+            "transdecoder/stringtie_transdecoder_genomecoords_ncRNAincluded.gff3"
+        default_target: True
+else:
+    rule all:
+        input:
+            "transdecoder/stringtie_transdecoder_genomecoords.gff3"
+        default_target: True
+
+
 
 include: "rules/star.smk"
 include: "rules/stringtie.smk"
 include: "rules/transdecoder.smk"
+include: "rules/ncrnainclude.smk"

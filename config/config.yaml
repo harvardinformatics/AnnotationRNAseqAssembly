@@ -16,3 +16,8 @@ aligner: STAR
 
 ## STAR ##
 StarIndexDir: "data/starindex/"
+
+
+## postprocessing ##
+
+include_ncrnas: True
