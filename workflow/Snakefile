@@ -3,6 +3,16 @@ from os.path import basename
 from os import system
 import pandas as pd
 import os.path
+from numpy import log2,median
+import gzip
+
+try:
+    from itertools import izip_longest
+except ImportError: 
+    from itertools import zip_longest as izip_longest
+
+
+
 
 configfile: "config/config.yaml"
 
