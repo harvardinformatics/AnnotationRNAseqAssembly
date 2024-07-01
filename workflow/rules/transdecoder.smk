@@ -2,9 +2,9 @@ localrules: transdecoder_orfs2genomegff3,concat_blastp_outputs, split_longestorf
 
 rule build_transcriptome_fasta:
     input:
-        "stringtie/stringtie_merged.gtf"
+        "results/stringtie/stringtie_merged.gtf"
     output:
-         "transdecoder/stringtie_cdna.fa"
+         "results/transdecoder/stringtie_cdna.fa"
     conda:
         "../envs/transdecoder.yml"
     threads: 1
@@ -15,9 +15,9 @@ rule build_transcriptome_fasta:
 
 rule convert_gtf2gff3:
     input:
-        "stringtie/stringtie_merged.gtf"
+        "results/stringtie/stringtie_merged.gtf"
     output:
-        "transdecoder/stringtie_merged.gff3"
+        "results/transdecoder/stringtie_merged.gff3"
     conda:
         "../envs/transdecoder.yml"
     threads: 1
@@ -26,36 +26,36 @@ rule convert_gtf2gff3:
 
 rule transdecoder_longorfs:
     input:
-        "transdecoder/stringtie_cdna.fa"
+        "results/transdecoder/stringtie_cdna.fa"
     output:
-        "transdecoder/stringtie_cdna.fa.transdecoder_dir/longest_orfs.pep"
+        "results/transdecoder/stringtie_cdna.fa.transdecoder_dir/longest_orfs.pep"
     conda:
         "../envs/transdecoder.yml"
     threads: 1
     shell:
         """
-        rm -rf transdecoder/stringtie_cdna.fa.transdecoder_dir/ 
-        TransDecoder.LongOrfs -t {input} -O transdecoder
+        rm -rf {input}.transdecoder_dir/ 
+        TransDecoder.LongOrfs -t {input} -O results/transdecoder
         """
 
 checkpoint split_longestorfs_fasta:
     input:
-        "transdecoder/stringtie_cdna.fa.transdecoder_dir/longest_orfs.pep"
+        "results/transdecoder/stringtie_cdna.fa.transdecoder_dir/longest_orfs.pep"
     output:
-        directory("transdecoder/blastp/chunks/")
+        directory("results/transdecoder/blastp/chunks/")
     conda:
         "../envs/transdecoder.yml"
     shell:
         """
-        mkdir -p transdecoder/blastp/chunks
+        #mkdir -p {output}
         python workflow/scripts/FastaSplitter.py -f {input} -maxn 1000 -o {output}
         """
 
 rule blastp_longestorfs:
     input:
-        "transdecoder/blastp/chunks/longest_orfs_chunk{chunk}.fasta"
+        "results/transdecoder/blastp/chunks/longest_orfs_chunk{chunk}.fasta"
     output:
-        "transdecoder/blastp/blastp_chunk{chunk}.tsv"
+        "results/transdecoder/blastp/blastp_chunk{chunk}.tsv"
     conda:
         "../envs/blast.yml"
     threads: 16
@@ -69,14 +69,14 @@ rule blastp_longestorfs:
 
 def getBlastOutfileList(wildcards):
    checkpoint_output = checkpoints.split_longestorfs_fasta.get(**wildcards).output[0]
-   return expand("transdecoder/blastp/blastp_chunk{i}.tsv",
+   return expand("results/transdecoder/blastp/blastp_chunk{i}.tsv",
              i=glob_wildcards(os.path.join(checkpoint_output, "longest_orfs_chunk{i}.fasta")).i)
 
 rule concat_blastp_outputs:
     input:
         getBlastOutfileList
     output:
-        "transdecoder/blastp/longorfs_blastp_concat.tsv"
+        "results/transdecoder/blastp/longorfs_blastp_concat.tsv"
     shell:
         """
         cat {input} > {output}
@@ -85,22 +85,22 @@ rule concat_blastp_outputs:
 
 rule transdecoder_predict:
     input:
-        stringtie_fasta="transdecoder/stringtie_cdna.fa",
-        blasthits="transdecoder/blastp/longorfs_blastp_concat.tsv" 
+        stringtie_fasta="results/transdecoder/stringtie_cdna.fa",
+        blasthits="results/transdecoder/blastp/longorfs_blastp_concat.tsv" 
     output:
-        "transdecoder/stringtie_cdna.fa.transdecoder.gff3"
+        "results/transdecoder/stringtie_cdna.fa.transdecoder.gff3"
     conda:
         "../envs/transdecoder.yml"
     shell:
-        "TransDecoder.Predict -t {input.stringtie_fasta} --single_best_only --retain_blastp_hits {input.blasthits} -O transdecoder" 
+        "TransDecoder.Predict -t {input.stringtie_fasta} --single_best_only --retain_blastp_hits {input.blasthits} -O results/transdecoder" 
 
 rule transdecoder_orfs2genomegff3:
     input:
-        cdnagff3="transdecoder/stringtie_cdna.fa.transdecoder.gff3",
-        stiegff3="transdecoder/stringtie_merged.gff3",
-        tsfasta="transdecoder/stringtie_cdna.fa"
+        cdnagff3="results/transdecoder/stringtie_cdna.fa.transdecoder.gff3",
+        stiegff3="results/transdecoder/stringtie_merged.gff3",
+        tsfasta="results/transdecoder/stringtie_cdna.fa"
     output:
-        "transdecoder/stringtie_transdecoder_genomecoords.gff3"    
+        "results/transdecoder/stringtie_transdecoder_genomecoords.gff3"    
     conda:
         "../envs/transdecoder.yml"
     shell:

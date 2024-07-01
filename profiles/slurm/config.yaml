@@ -9,7 +9,14 @@ set-threads:
     star_2ndpass: 8
 
 set-resources:
-    # STAR spliced-alignment    
+    # STAR spliced-alignment
+    star_index:
+        nodes: 1
+        ntasks: 1
+        threads: 24
+        mem_mb: 100000
+        slurm_partition: "shared"
+        runtime: 960
     star_1stpass:
         nodes: 1
         ntasks: 1

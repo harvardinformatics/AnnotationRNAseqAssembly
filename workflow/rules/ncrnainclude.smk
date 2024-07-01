@@ -2,10 +2,10 @@ localrules: ncrna_include
 
 rule ncrna_include:
     input:
-        tdecgff3="transdecoder/stringtie_transdecoder_genomecoords.gff3",
-        stiegtf="stringtie/stringtie_merged.gtf" 
+        tdecgff3="results/transdecoder/stringtie_transdecoder_genomecoords.gff3",
+        stiegtf="results/stringtie/stringtie_merged.gtf" 
     output:
-        "transdecoder/stringtie_transdecoder_genomecoords_ncRNAincluded.gff3"
+        "results/transdecoder/stringtie_transdecoder_genomecoords_ncRNAincluded.gff3"
     shell:
         """
         python workflow/scripts/IntegrateStringtieNoTdecoderOrfTscripts.py \

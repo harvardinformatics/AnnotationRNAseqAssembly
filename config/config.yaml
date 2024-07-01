@@ -4,7 +4,7 @@
 ########################
 
 
-fastqDir: "/data/fastq/"
+fastqDir: "data/fastq/"
 sampleTable: "sampletable.tsv"
 ## Genome ##
 genome: "data/genome/headercleaned_GCF_000001215.4_Release_6_plus_ISO1_MT_genomic.fna"
@@ -15,7 +15,8 @@ blastdbase: "data/blast/dipterans_uniprot-trembl.fasta"
 aligner: STAR
 
 ## STAR ##
-StarIndexDir: "data/starindex/"
+StarIndexExists: False
+StarIndexDir: "results/starindex/"
 
 
 ## postprocessing ##
