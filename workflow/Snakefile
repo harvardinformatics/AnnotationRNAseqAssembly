@@ -1,8 +1,18 @@
 from glob import glob
-from os.path import basename
+from os.path import basename,join
 from os import system
 import pandas as pd
 import os.path
+from numpy import log2,median
+import gzip
+
+try:
+    from itertools import izip_longest
+except ImportError: 
+    from itertools import zip_longest as izip_longest
+
+
+
 
 configfile: "config/config.yaml"
 
@@ -11,17 +21,26 @@ SAMPLES=list(sampleinfo.loc[:,"sampleid"])
 
 
 if config["aligner"] in ["STAR","star"]:
-    system("mkdir -p star2ndpass/tmp")
+    system("mkdir -p results/star2ndpass/tmp")
 
 
-rule all:
-    input:
-        #"transdecoder/blastp/fastasplit.done",
-        #"transdecoder/stringtie_merged.gff3",
-        #"transdecoder/blastp/subfilelist.txt",
-        "transdecoder/blastp/longorfs_blastp_concat.tsv"
-    default_target: True
+if config["include_ncrnas"] ==True:
+    rule all:
+        input:
+            "results/transdecoder/stringtie_transdecoder_genomecoords_ncRNAincluded.gff3"
+            #"starindex/SA"
+        default_target: True
+else:
+    rule all:
+        input:
+            "results/transdecoder/stringtie_transdecoder_genomecoords.gff3"
+        default_target: True
+
+
 
 include: "rules/star.smk"
 include: "rules/stringtie.smk"
 include: "rules/transdecoder.smk"
+include: "rules/ncrnainclude.smk"
+if config["StarIndexExists"] == False:
+    include: "rules/starindex.smk"

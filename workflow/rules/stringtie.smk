@@ -1,6 +1,6 @@
 def get_sample_path(samplename,aligner):
     if aligner in ["STAR","star"]:
-        return "star2ndpass/sorted_%s_STAR2ndpassAligned.out.bam" % samplename
+        return "results/star2ndpass/sorted_%s_STAR2ndpassAligned.out.bam" % samplename
     else:
         raise ValueError("unknown aligner")
 
@@ -12,7 +12,7 @@ rule stringtie:
     input:
         get_stringtie_input
     output:
-         "stringtie/{sample}_stringtie.gtf"
+         "results/stringtie/{sample}_stringtie.gtf"
     conda:
         "../envs/stringtie.yml"
     threads: 16
@@ -21,9 +21,9 @@ rule stringtie:
 
 rule stringtie_merge:
     input:
-        expand("stringtie/{sample}_stringtie.gtf",sample=SAMPLES)
+        expand("results/stringtie/{sample}_stringtie.gtf",sample=SAMPLES)
     output:
-        "stringtie/stringtie_merged.gtf"
+        "results/stringtie/stringtie_merged.gtf"
     conda:
         "../envs/stringtie.yml"
     threads: 1
@@ -31,5 +31,5 @@ rule stringtie_merge:
        """
        rm -f stringtie_gtflist.txt
        for sample in {input}; do echo $sample >> stringtie_gtflist.txt;done
-       stringtie -p {threads} --merge stringtie_gtflist.txt -o stringtie/stringtie_merged.gtf
+       stringtie -p {threads} --merge stringtie_gtflist.txt -o {output}
        """       

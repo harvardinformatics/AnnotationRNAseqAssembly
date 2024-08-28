@@ -5,4 +5,4 @@ channels:
 
 dependencies:
     - star==2.7.11b
-
+    - biopython==1.83

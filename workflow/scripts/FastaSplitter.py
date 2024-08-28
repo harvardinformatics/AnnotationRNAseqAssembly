@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 import argparse
+import os
 from Bio import SeqIO
-from os.path import basename
+from os.path import basename,exists
 
 if __name__=="__main__":
     parser = argparse.ArgumentParser(description='split fasta files into mulitple files of max specified number of seqs')
@@ -12,6 +13,10 @@ if __name__=="__main__":
     
     file_index = 1
     seqcount = 0
+    isExist = exists(opts.outdir)
+    if not isExist:
+        os.makedirs(opts.outdir)
+        
     fout = open('%s/%s_chunk%s.fasta' % (opts.outdir,'.'.join(basename(opts.fastain).split('.')[:-1]),file_index),'w')
 
     for record in SeqIO.parse(opts.fastain,'fasta'):

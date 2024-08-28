@@ -1,9 +1,10 @@
 rule star_1stpass:
     input:
         r1=config["fastqDir"] + "{sample}_1.fastq.gz",
-        r2=config["fastqDir"] + "{sample}_2.fastq.gz"
+        r2=config["fastqDir"] + "{sample}_2.fastq.gz",
+        index=config["StarIndexDir"] + "SA"
     output:
-        "star1stpass/" + "{sample}" + "_STAR1stpassSJ.out.tab"
+        "results/star1stpass/" + "{sample}" + "_STAR1stpassSJ.out.tab"
     conda:
         "../envs/star.yml"
     threads: 8
@@ -11,47 +12,48 @@ rule star_1stpass:
         indexdir = config["StarIndexDir"]
     shell:
         """
-        rm -rf star1stpass/{wildcards.sample}_1stpassSTARtmp
+        rm -rf results/star1stpass/{wildcards.sample}_1stpassSTARtmp
         STAR --runThreadN {threads} --genomeDir {params.indexdir} \
-        --outFileNamePrefix star1stpass/{wildcards.sample}_STAR1stpass \
-        --outTmpDir star1stpass/{wildcards.sample}_1stpassSTARtmp \
+        --outFileNamePrefix results/star1stpass/{wildcards.sample}_STAR1stpass \
+        --outTmpDir results/star1stpass/{wildcards.sample}_1stpassSTARtmp \
         --readFilesIn <(gunzip -c {input.r1}) <(gunzip -c {input.r2}) 
         """       
 
 rule star_2ndpass:
     input:
-        tablelist = expand("star1stpass/{sample}_STAR1stpassSJ.out.tab",sample=SAMPLES),
+        tablelist = expand("results/star1stpass/{sample}_STAR1stpassSJ.out.tab",sample=SAMPLES),
         r1=config["fastqDir"] + "{sample}" + "_1.fastq.gz",
-        r2=config["fastqDir"] + "{sample}" + "_2.fastq.gz"
+        r2=config["fastqDir"] + "{sample}" + "_2.fastq.gz",
+        index=config["StarIndexDir"] + "SA"
     output:
-        "star2ndpass/" + "{sample}" + "_STAR2ndpassAligned.out.sam"
+        "results/star2ndpass/" + "{sample}" + "_STAR2ndpassAligned.out.sam"
     conda:
         "../envs/star.yml"
     threads: 8
     params:
         indexdir = config["StarIndexDir"],
-        tablestring = ' '.join(expand("star1stpass/{sample}_STAR1stpassSJ.out.tab", sample=SAMPLES))
+        tablestring = ' '.join(expand("results/star1stpass/{sample}_STAR1stpassSJ.out.tab", sample=SAMPLES))
     shell:
         """
-        rm -rf star2ndpass/{wildcards.sample}_2ndpassSTARtmp
+        rm -rf results/star2ndpass/{wildcards.sample}_2ndpassSTARtmp
         STAR --runThreadN {threads} \
         --genomeDir {params.indexdir} \
-        --outTmpDir star2ndpass/{wildcards.sample}_2ndpassSTARtmp \
+        --outTmpDir results/star2ndpass/{wildcards.sample}_2ndpassSTARtmp \
         --sjdbFileChrStartEnd {params.tablestring} \
-        --outFileNamePrefix star2ndpass/{wildcards.sample}_STAR2ndpass \
+        --outFileNamePrefix results/star2ndpass/{wildcards.sample}_STAR2ndpass \
         --readFilesIn <(gunzip -c {input.r1}) <(gunzip -c {input.r2})
         """
 
 rule samsort_star:
     input:
-        "star2ndpass/" + "{sample}" + "_STAR2ndpassAligned.out.sam"
+        "results/star2ndpass/" + "{sample}" + "_STAR2ndpassAligned.out.sam"
     output:
-        "star2ndpass/sorted_" + "{sample}" + "_STAR2ndpassAligned.out.bam"
+        "results/star2ndpass/sorted_" + "{sample}" + "_STAR2ndpassAligned.out.bam"
     conda:
         "../envs/samtools.yml"
     threads: 12
     shell:
         """
-        rm -f star2ndpass/tmp/{wildcards.sample}.aln.sorted*bam
-        samtools sort -@ {threads} -T star2ndpass/tmp/{wildcards.sample}.aln.sorted -O bam -o {output} {input}
+        rm -f results/star2ndpass/tmp/{wildcards.sample}.aln.sorted*bam
+        samtools sort -@ {threads} -T results/star2ndpass/tmp/{wildcards.sample}.aln.sorted -O bam -o {output} {input}
         """ 
