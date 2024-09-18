@@ -39,6 +39,7 @@ rule star_2ndpass:
         STAR --runThreadN {threads} \
         --genomeDir {params.indexdir} \
         --outTmpDir results/star2ndpass/{wildcards.sample}_2ndpassSTARtmp \
+        --outSAMstrandField intronMotif \
         --sjdbFileChrStartEnd {params.tablestring} \
         --outFileNamePrefix results/star2ndpass/{wildcards.sample}_STAR2ndpass \
         --readFilesIn <(gunzip -c {input.r1}) <(gunzip -c {input.r2})
