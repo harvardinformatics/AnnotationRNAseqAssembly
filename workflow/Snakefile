@@ -23,24 +23,15 @@ SAMPLES=list(sampleinfo.loc[:,"sampleid"])
 if config["aligner"] in ["STAR","star"]:
     system("mkdir -p results/star2ndpass/tmp")
 
-
-if config["include_ncrnas"] ==True:
-    rule all:
-        input:
-            "results/transdecoder/stringtie_transdecoder_genomecoords_ncRNAincluded.gff3"
-            #"starindex/SA"
-        default_target: True
-else:
-    rule all:
-        input:
-            "results/transdecoder/stringtie_transdecoder_genomecoords.gff3"
-        default_target: True
-
+rule all:
+    input:
+        "results/stringtie_merged_wCDSfeatures.gff3"
+    default_target: True
 
 
 include: "rules/star.smk"
 include: "rules/stringtie.smk"
 include: "rules/transdecoder.smk"
-include: "rules/ncrnainclude.smk"
+include: "rules/add_cds.smk"
 if config["StarIndexExists"] == False:
     include: "rules/starindex.smk"

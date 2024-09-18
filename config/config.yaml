@@ -7,18 +7,14 @@
 fastqDir: "data/fastq/"
 sampleTable: "sampletable.tsv"
 ## Genome ##
-genome: ""
+genome: "data/genome/headercleaned_GCF_000001215.4_Release_6_plus_ISO1_MT_genomic.fna"
 
 ## blast dbase for transdecoder searches ##
-blastdbase: ""
+blastdbase: "data/blast/dipterans_uniprot-trembl.fasta"
 
-aligner: STAR
+aligner: "STAR"
 
 ## STAR ##
 StarIndexExists: False
 StarIndexDir: "results/starindex/"
 
-
-## postprocessing ##
-
-include_ncrnas: False
