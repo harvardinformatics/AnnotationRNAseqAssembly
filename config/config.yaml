@@ -3,14 +3,19 @@
 ## RNA-SEQ FASTQ FILES #
 ########################
 
+"""
+Create a data directory and genome, blast and fastq subdirectories in the top level directory
+for executing the workflow after cloning the GitHub repostiory. Then populate those 
+directories with the relevant files.
+"""
 
 fastqDir: "data/fastq/"
 sampleTable: "sampletable.tsv"
 ## Genome ##
-genome: "data/genome/headercleaned_GCF_000001215.4_Release_6_plus_ISO1_MT_genomic.fna"
+genome: "data/genome/"
 
 ## blast dbase for transdecoder searches ##
-blastdbase: "data/blast/dipterans_uniprot-trembl.fasta"
+blastdbase: "data/blast/"
 
 aligner: "STAR"
 
