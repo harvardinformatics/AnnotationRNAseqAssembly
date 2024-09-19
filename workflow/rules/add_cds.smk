@@ -6,7 +6,9 @@ rule add_cds:
         stiegtf="results/stringtie/stringtie_merged.gtf" 
     output:
         "results/stringtie_merged_wCDSfeatures.gff3"
-    shell:
+    conda:
+        "gffread"
+    script:
         """
         python workflow/scripts/MergeNcRnaPredstoProteinCodingPreds.py \
         -tdecgff3 {input.tdecgff3} -gtf {input.stiegtf} 
