@@ -15,77 +15,77 @@ set-resources:
         ntasks: 1
         threads: 24
         mem_mb: 100000
-        slurm_partition: "shared"
+        slurm_partition: ""
         runtime: 960
     star_1stpass:
         nodes: 1
         ntasks: 1
         threads: 8
         mem_mb: 64000
-        slurm_partition: "shared"
+        slurm_partition: ""
         runtime: 1920
     star_2ndpass:
         nodes: 1
         ntasks: 1
         threads: 8
         mem_mb: 64000
-        slurm_partition: "shared"
+        slurm_partition: ""
         runtime: 1920
     samsort_star:
         nodes: 1
         ntasks: 1
         threads: 12
         mem_mb: 24000
-        slurm_partition: "shared"
+        slurm_partition: ""
         runtime: 360
     stringtie:
         nodes: 1
         ntasks: 1
         threads: 16
         mem_mb: 32000
-        slurm_partition: "shared"
+        slurm_partition: ""
         runtime: 720
     stringtie_merge:
         nodes: 1
         ntasks: 1
         threads: 1
         mem_mb: 20000
-        slurm_partition: "shared"
+        slurm_partition: ""
         runtime: 360
     build_transcriptome_fasta:
         nodes: 1
         ntasks: 1
         threads: 1
         mem_mb: 5000
-        slurm_partition: "shared"
+        slurm_partition: ""
         runtime: 60
     convert_gtf2gff3:
         nodes: 1
         ntasks: 1
         threads: 1
         mem_mb: 5000
-        slurm_partition: "shared"
+        slurm_partition: ""
         runtime: 60
     transdecoder_longorfs:
         nodes: 1
         ntasks: 1
         threads: 1
         mem_mb: 5000
-        slurm_partition: "shared"
+        slurm_partition: ""
         runtime: 1430
     blastp_longestorfs:
         nodes: 1
         ntasks: 1
         threads: 16
         mem_mb: 8000
-        slurm_partition: "serial_requeue,shared"
+        slurm_partition: ""
         runtime: 480
     transdecoder_predict:
         nodes: 1
         ntasks: 1
         threads: 1
         mem_mb: 15000
-        slurm_partition: "serial_requeue,shared"
+        slurm_partition: ""
         runtime: 960
                 
 
