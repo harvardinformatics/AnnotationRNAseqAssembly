@@ -7,9 +7,6 @@ rule add_cds:
     output:
         "results/stringtie_merged_wCDSfeatures.gff3"
     conda:
-        "gffread"
+        "../envs/gffread"
     script:
-        """
-        python workflow/scripts/MergeNcRnaPredstoProteinCodingPreds.py \
-        -tdecgff3 {input.tdecgff3} -gtf {input.stiegtf} 
-        """
+        "../scripts/MergeNcRnaPredstoProteinCodingPreds.py -tdecgff3 {{input.tdecgff3}} -gtf {{input.stiegtf}}" 
