@@ -1,6 +1,7 @@
 import argparse
 from subprocess import Popen,PIPE
 from glob import glob
+import re
 
 fields = ['seqid', 'source', 'type', 'start',
           'end', 'score', 'strand', 'phase', 'attributes']
@@ -20,8 +21,8 @@ def CreateGeneIntervalDict(gff3):
                         genedict[geneid]['type'] = 'gene'
 
                     else:
-                        start = min(int(linedict['start']),genedict[geneid]['start'])
-                        end = max(int(linedict['end']),genedict[geneid]['end'])
+                        start = min(int(linedict['start']),int(genedict[geneid]['start']))
+                        end = max(int(linedict['end']),int(genedict[geneid]['end']))
                         genedict[geneid]['start'] =  start
                         genedict[geneid]['end'] =  end
     
@@ -120,21 +121,21 @@ if __name__=="__main__":
             if linedict['type'] == 'transcript':
                 # write gene level protein coding feature
                 if attribute_dict['Parent'] in tdec_gene_dict and attribute_dict['Parent'] not in seen_tdec_genes: #first time sees gene id in a transcript
-                    merge_out.write('{}\n'.format(tdec_gene_dict[attribute_dict['Parent']].strip().split('|')[0]))
+                    merge_out.write('{}\n'.format(re.sub("\\^.*?\\^","",tdec_gene_dict[attribute_dict['Parent']].strip().split('|')[0]).replace('"','').replace('-;',';').split(',score')[0].replace(' ','_').split('(')[0][:-1]))
                     seen_tdec_genes.add(attribute_dict['Parent'])
 
                 # write putative ncRNA gene feature    
                 elif attribute_dict['Parent'] not in seen_nc_genes:
                     gene_dict = linedict.copy()
                     gene_dict['type'] = 'gene'
-                    gene_dict['start'] = gene_interval_dict[attribute_dict['Parent']]['start']
-                    gene_dict['end'] = gene_interval_dict[attribute_dict['Parent']]['end']
+                    gene_dict['start'] = str(gene_interval_dict[attribute_dict['Parent']]['start'])
+                    gene_dict['end'] = str(gene_interval_dict[attribute_dict['Parent']]['end'])
                     gene_dict['attributes'] = 'ID={}'.format(attribute_dict['Parent'])
                     merge_out.write('{}\n'.format('\t'.join([gene_dict[field] for field in fields])))
                     seen_nc_genes.add(attribute_dict['Parent']) 
                 # write protein coding mRNA and associated child features    
                 if attribute_dict['ID'] in tdec_transcript_dict:
-                    merge_out.write('{}\n'.format(tdec_transcript_dict[attribute_dict['ID']]['mRNA'].split('|')[0]))
+                    merge_out.write('{}\n'.format(re.sub("\\^.*?\\^","",tdec_transcript_dict[attribute_dict['ID']]['mRNA'].split('|')[0]).replace('-','').replace('"','').split(',score')[0].replace(' ','_').split('(')[0][:-1]))
                     for utr in tdec_transcript_dict[attribute_dict['ID']]['five_prime_UTR']:
                         merge_out.write(utr)
                     for exon in tdec_transcript_dict[attribute_dict['ID']]['exons']:
