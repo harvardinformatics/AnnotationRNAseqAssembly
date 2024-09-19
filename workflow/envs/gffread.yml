@@ -4,4 +4,4 @@ channels:
     - defaults
 
 dependencies:
-    - gffread==0.12.7-4
+    - gffread==0.12.7
