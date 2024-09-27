@@ -1,7 +1,7 @@
 rule star_1stpass:
     input:
-        r1=config["fastqDir"] + "{sample}_1.fastq.gz",
-        r2=config["fastqDir"] + "{sample}_2.fastq.gz",
+        r1=sample2fastq[{sample}]["R1"],
+        r2=sample2fastq[{sample}]["R2"],
         index=config["StarIndexDir"] + "SA"
     output:
         "results/star1stpass/" + "{sample}" + "_STAR1stpassSJ.out.tab"
@@ -22,8 +22,8 @@ rule star_1stpass:
 rule star_2ndpass:
     input:
         tablelist = expand("results/star1stpass/{sample}_STAR1stpassSJ.out.tab",sample=SAMPLES),
-        r1=config["fastqDir"] + "{sample}" + "_1.fastq.gz",
-        r2=config["fastqDir"] + "{sample}" + "_2.fastq.gz",
+        r1=sample2fastq[{sample}]["R1"],
+        r2=sample2fastq[{sample}]["R2"],
         index=config["StarIndexDir"] + "SA"
     output:
         "results/star2ndpass/" + "{sample}" + "_STAR2ndpassAligned.out.sam"
