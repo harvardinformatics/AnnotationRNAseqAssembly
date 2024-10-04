@@ -19,7 +19,7 @@ configfile: "config/config.yaml"
 sampleinfo = pd.read_table(config["sampleTable"])
 SAMPLES=list(sampleinfo.loc[:,"sampleid"])
 sample2fastq = {}
-for i in range len(SAMPLES):
+for i in range(len(SAMPLES)):
     sample2fastq[sampleinfo["sampleid"][i]] = {'r1': sampleinfo["R1"][i],'r2': sampleinfo["R2"][i]}
 
 

@@ -1,7 +1,13 @@
+def input_function_r1(wildcards):
+    return sampleinfo.loc[sampleinfo["sampleid"] ==wildcards.sample,"R1"].values[0] 
+
+def input_function_r2(wildcards):
+    return sampleinfo.loc[sampleinfo["sampleid"] ==wildcards.sample,"R2"].values[0]
+
 rule star_1stpass:
     input:
-        r1=sample2fastq[{sample}]["R1"],
-        r2=sample2fastq[{sample}]["R2"],
+        r1 = input_function_r1,
+        r2 = input_function_r2,
         index=config["StarIndexDir"] + "SA"
     output:
         "results/star1stpass/" + "{sample}" + "_STAR1stpassSJ.out.tab"
@@ -22,8 +28,8 @@ rule star_1stpass:
 rule star_2ndpass:
     input:
         tablelist = expand("results/star1stpass/{sample}_STAR1stpassSJ.out.tab",sample=SAMPLES),
-        r1=sample2fastq[{sample}]["R1"],
-        r2=sample2fastq[{sample}]["R2"],
+        r1 = input_function_r1,
+        r2 = input_function_r2,
         index=config["StarIndexDir"] + "SA"
     output:
         "results/star2ndpass/" + "{sample}" + "_STAR2ndpassAligned.out.sam"
