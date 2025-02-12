@@ -28,4 +28,6 @@ snakemake --snakefile workflow/Snakefile --profile ./profiles/slurm
 
 This command can easily be wrapped as a cluster submission job. As it simply manages conda package installs, submission of cluster data analysis jobs, and runs some low-memory serial jobs for file conversions, it can be submitted with one core, and with a modest amount of memory, e.g. a few Gb.
 
+## Testing 
+A small test data set using four RNA-seq paired-end libraries and one chromosome for *Drosophila melanogaster* are located in the **test** directory. The *config.yaml* file in the **config** directory as well as *samplesheet.tsv* currently point to data found in **test/**. This data set should take less than 10 minutes to execute assuming your wait times for SLURM jobs to run isn't long. To run this workflow on your own data, as alluded to above, you should create a **data** directory and make sure your config file and the sample sheet point to the correct location of your data. 
 
