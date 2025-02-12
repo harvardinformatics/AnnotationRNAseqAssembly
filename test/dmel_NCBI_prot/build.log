@@ -1,0 +1,11 @@
+
+
+Building a new DB, current time: 09/08/2023 05:14:38
+New DB name:   /n/holylfs05/LABS/informatics/Lab/genome_annotation_project/dipterans/protein_NCBI/dmel/GCF_000001215.4_Release_6_plus_ISO1_MT_protein.faa
+New DB title:  GCF_000001215.4_Release_6_plus_ISO1_MT_protein.faa
+Sequence type: Protein
+Keep MBits: T
+Maximum file size: 1000000000B
+Adding sequences from FASTA; added 30717 sequences in 1.00864 seconds.
+
+

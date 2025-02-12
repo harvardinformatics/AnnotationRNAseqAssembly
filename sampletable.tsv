@@ -1,7 +1,5 @@
 sampleid	R1	R2
-SRR1576457	fastq/SRR1576457_1.fastq	fastq/SRR1576457_2.fastq
-SRR1576458	fastq/SRR1576458_1.fastq	fastq/SRR1576458_2.fastq
-SRR1576459	fastq/SRR1576459_1.fastq	fastq/SRR1576459_2.fastq
-SRR1576460	fastq/SRR1576460_1.fastq	fastq/SRR1576460_2.fastq
-SRR1576461	fastq/SRR1576461_1.fastq	fastq/SRR1576461_2.fastq
-SRR1576462	fastq/SRR1576462_1.fastq	fastq/SRR1576462_2.fastq
+SRR1765780	data/fastq/SRR1765780_1.fastq.gz	data/fastq/SRR1765780_2.fastq.gz
+SRR1767340	data/fastq/SRR1767340_1.fastq.gz	data/fastq/SRR1767340_2.fastq.gz
+SRR1767365	data/fastq/SRR1767365_1.fastq.gz	data/fastq/SRR1767365_2.fastq.gz
+SRR1767366	data/fastq/SRR1767366_1.fastq.gz	data/fastq/SRR1767366_2.fastq.gz
