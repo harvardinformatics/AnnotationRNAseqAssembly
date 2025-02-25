@@ -11,7 +11,7 @@ module purge
 module load python
 mamba activate snakemake_py311
 
-global_profile=$1 # full path to directory where global config.yaml lives
+global_profile=$1 # full path to directory where global config.yaml lives, e.g. ~/.config/snakemake/cannon/
 
 snakemake --snakefile workflow/Snakefile --use-conda --profile $global_profile --unlock
 snakemake --snakefile workflow/Snakefile --use-conda --profile $global_profile --workflow-profile ./profiles/slurm

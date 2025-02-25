@@ -19,7 +19,7 @@ rule star_1stpass:
     shell:
         """
         rm -rf results/star1stpass/{wildcards.sample}_1stpassSTARtmp
-        STAR --runThreadN {threads} --genomeDir {params.indexdir} \
+        STAR --runThreadN {resources.cpus_per_task} --genomeDir {params.indexdir} \
         --outFileNamePrefix results/star1stpass/{wildcards.sample}_STAR1stpass \
         --outTmpDir results/star1stpass/{wildcards.sample}_1stpassSTARtmp \
         --readFilesIn <(gunzip -c {input.r1}) <(gunzip -c {input.r2}) 
@@ -42,7 +42,7 @@ rule star_2ndpass:
     shell:
         """
         rm -rf results/star2ndpass/{wildcards.sample}_2ndpassSTARtmp
-        STAR --runThreadN {threads} \
+        STAR --runThreadN {resources.cpus_per_task} \
         --genomeDir {params.indexdir} \
         --outTmpDir results/star2ndpass/{wildcards.sample}_2ndpassSTARtmp \
         --outSAMstrandField intronMotif \
@@ -62,5 +62,5 @@ rule samsort_star:
     shell:
         """
         rm -f results/star2ndpass/tmp/{wildcards.sample}.aln.sorted*bam
-        samtools sort -@ {threads} -T results/star2ndpass/tmp/{wildcards.sample}.aln.sorted -O bam -o {output} {input}
+        samtools sort -@ {resources.cpus_per_task} -T results/star2ndpass/tmp/{wildcards.sample}.aln.sorted -O bam -o {output} {input}
         """ 
