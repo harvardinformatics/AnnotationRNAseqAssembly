@@ -1,5 +1,5 @@
 fastqDir: "test/fastq/"
-sampleTable: "sampletable.tsv"
+sampleTable: "samplesheet.tsv"
 genome: "test/genome/dmel_NC_004353.4_genome.fa"
 blastdbase: "test/dmel_NCBI_prot/GCF_000001215.4_Release_6_plus_ISO1_MT_protein.faa"
 aligner: "STAR"
