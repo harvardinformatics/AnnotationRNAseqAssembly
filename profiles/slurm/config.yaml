@@ -1,91 +1,79 @@
-executor: slurm
-use-conda: True
-jobs: 100
-latency-wait: 100
-retries: 0
-
 set-threads:
     star_1stpass: 8
     star_2ndpass: 8
+    star_index: 24
+    samsort_star: 12
+    stringtie: 16
+    stringtie_merge: 1
+    build_transcriptome_fasta: 1
+    convert_gtf2gff3: 1
+    transdecoder_longorfs: 1
+    blastp_longestorfs: 16
+    transdecoder_predict: 1
 
 set-resources:
     # STAR spliced-alignment
     star_index:
         nodes: 1
-        ntasks: 1
-        threads: 24
+        tasks: 1
+        cpus_per_task: 24
         mem_mb: 100000
-        slurm_partition: ""
         runtime: 960
     star_1stpass:
         nodes: 1
-        ntasks: 1
-        threads: 8
+        tasks: 1
+        cpus_per_task: 8
         mem_mb: 64000
-        slurm_partition: ""
         runtime: 1920
     star_2ndpass:
         nodes: 1
-        ntasks: 1
-        threads: 8
+        tasks: 1
+        cpus_per_task: 8
         mem_mb: 64000
-        slurm_partition: ""
         runtime: 1920
     samsort_star:
         nodes: 1
-        ntasks: 1
-        threads: 12
+        tasks: 1
+        cpus_per_task: 12
         mem_mb: 24000
-        slurm_partition: ""
         runtime: 360
     stringtie:
         nodes: 1
-        ntasks: 1
-        threads: 16
+        tasks: 1
+        cpus_per_task: 16
         mem_mb: 32000
-        slurm_partition: ""
         runtime: 720
     stringtie_merge:
         nodes: 1
-        ntasks: 1
-        threads: 1
+        tasks: 1
+        cpus_per_task: 1
         mem_mb: 20000
-        slurm_partition: ""
         runtime: 360
     build_transcriptome_fasta:
         nodes: 1
-        ntasks: 1
-        threads: 1
+        tasks: 1
         mem_mb: 5000
-        slurm_partition: ""
         runtime: 60
     convert_gtf2gff3:
         nodes: 1
-        ntasks: 1
-        threads: 1
+        tasks: 1
         mem_mb: 5000
-        slurm_partition: ""
         runtime: 60
     transdecoder_longorfs:
         nodes: 1
-        ntasks: 1
-        threads: 1
+        tasks: 1
         mem_mb: 5000
-        slurm_partition: ""
         runtime: 1430
     blastp_longestorfs:
         nodes: 1
-        ntasks: 1
-        threads: 16
+        tasks: 1
+        cpus_per_task: 16
         mem_mb: 8000
-        slurm_partition: ""
         runtime: 480
     transdecoder_predict:
         nodes: 1
-        ntasks: 1
-        threads: 1
+        tasks: 1
         mem_mb: 15000
-        slurm_partition: ""
         runtime: 960
                 
 

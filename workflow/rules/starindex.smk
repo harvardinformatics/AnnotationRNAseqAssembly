@@ -21,7 +21,7 @@ rule star_index:
     shell:
         """
         STAR --runMode genomeGenerate --genomeSAindexNbases {params.nbases} \
-        --runThreadN {threads} --genomeDir {params.outdir} \
+        --runThreadN {resources.cpus_per_task} --genomeDir {params.outdir} \
         --genomeFastaFiles {input}
         """  
     

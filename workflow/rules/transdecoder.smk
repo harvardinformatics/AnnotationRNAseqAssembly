@@ -7,7 +7,6 @@ rule build_transcriptome_fasta:
          "results/transdecoder/stringtie_cdna.fa"
     conda:
         "../envs/transdecoder.yml"
-    threads: 1
     params:
         genome=config["genome"] 
     shell:
@@ -20,7 +19,6 @@ rule convert_gtf2gff3:
         "results/transdecoder/stringtie_merged.gff3"
     conda:
         "../envs/transdecoder.yml"
-    threads: 1
     shell:
         "gtf_to_alignment_gff3.pl {input} > {output}"
 
@@ -31,7 +29,6 @@ rule transdecoder_longorfs:
         "results/transdecoder/stringtie_cdna.fa.transdecoder_dir/longest_orfs.pep"
     conda:
         "../envs/transdecoder.yml"
-    threads: 1
     shell:
         """
         rm -rf {input}.transdecoder_dir/ 
@@ -46,8 +43,7 @@ checkpoint split_longestorfs_fasta:
     conda:
         "../envs/transdecoder.yml"
     shell:
-        """
-        #mkdir -p {output}
+       """
         python workflow/scripts/FastaSplitter.py -f {input} -maxn 1000 -o {output}
         """
 
@@ -63,7 +59,7 @@ rule blastp_longestorfs:
         dbase=config["blastdbase"]
     shell:
         """
-        blastp -max_target_seqs 5 -num_threads 16  -evalue 1e-4 \
+        blastp -max_target_seqs 5 -num_threads {resources.cpus_per_task}  -evalue 1e-4 \
         -query {input} -outfmt 6 -db {params.dbase} > {output}
         """
 
