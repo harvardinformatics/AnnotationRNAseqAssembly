@@ -54,7 +54,6 @@ rule blastp_longestorfs:
         "results/transdecoder/blastp/blastp_chunk{chunk}.tsv"
     conda:
         "../envs/blast.yml"
-    threads: 16
     params:
         dbase=config["blastdbase"]
     shell:
