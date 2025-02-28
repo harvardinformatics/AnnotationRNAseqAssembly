@@ -3,7 +3,7 @@ set-threads:
     star_2ndpass: 8
     star_index: 24
     samsort_star: 12
-    stringtie: 16
+    stringtie: 13
     stringtie_merge: 1
     build_transcriptome_fasta: 1
     convert_gtf2gff3: 1
@@ -40,7 +40,7 @@ set-resources:
     stringtie:
         nodes: 1
         tasks: 1
-        cpus_per_task: 16
+        cpus_per_task: 4
         mem_mb: 32000
         runtime: 720
     stringtie_merge:
