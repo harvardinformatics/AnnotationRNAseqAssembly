@@ -16,9 +16,11 @@ rule stringtie:
     conda:
         "../envs/stringtie.yml"
     threads: 16
+    params:
+        strandedness=(lambda s: '--rf' if s == 'rf' else ('--fr' if s == 'fr' else ''))(config['strandedness'])
     shell:
-        "stringtie {input} -p {threads} -o {output}"
-
+        "stringtie {input} -p {threads} {params.strandedness} -o {output}"
+ 
 rule stringtie_merge:
     input:
         expand("results/stringtie/{sample}_stringtie.gtf",sample=SAMPLES)
