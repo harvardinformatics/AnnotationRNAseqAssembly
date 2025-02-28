@@ -15,12 +15,10 @@ rule stringtie:
          "results/stringtie/{sample}_stringtie.gtf"
     conda:
         "../envs/stringtie.yml"
-    threads: 16
     params:
         strandedness=(lambda s: '--rf' if s == 'rf' else ('--fr' if s == 'fr' else ''))(config['strandedness'])
     shell:
-        "stringtie {input} -p {threads} {params.strandedness} -o {output}"
- 
+        "stringtie {input} -p {resources.cpus_per_task} {params.strandedness} -o {output}"
 rule stringtie_merge:
     input:
         expand("results/stringtie/{sample}_stringtie.gtf",sample=SAMPLES)
@@ -28,10 +26,9 @@ rule stringtie_merge:
         "results/stringtie/stringtie_merged.gtf"
     conda:
         "../envs/stringtie.yml"
-    threads: 1
     shell:
        """
        rm -f stringtie_gtflist.txt
        for sample in {input}; do echo $sample >> stringtie_gtflist.txt;done
-       stringtie -p {threads} --merge stringtie_gtflist.txt -o {output}
+       stringtie -p {resources.cpus_per_task} --merge stringtie_gtflist.txt -o {output}
        """       
