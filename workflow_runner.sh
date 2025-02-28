@@ -13,7 +13,6 @@ mamba activate snakemake_py311
 
 global_profile=$1 # full path to directory where global config.yaml lives, e.g. <your home dir>/.config/snakemake/cannon/
 
-snakemake --snakefile workflow/Snakefile --use-conda --profile $global_profile --unlock
 snakemake -p --snakefile workflow/Snakefile --use-conda --profile $global_profile --workflow-profile ./profiles/slurm
 
 
