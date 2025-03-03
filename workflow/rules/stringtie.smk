@@ -23,12 +23,13 @@ rule stringtie_merge:
     input:
         expand("results/stringtie/{sample}_stringtie.gtf",sample=SAMPLES)
     output:
-        "results/stringtie/stringtie_merged.gtf"
+        gtflist=temp("stringtie_gtflist.txt"),
+        gtf="results/stringtie/stringtie_merged.gtf"
     conda:
         "../envs/stringtie.yml"
     shell:
        """
        rm -f stringtie_gtflist.txt
-       for sample in {input}; do echo $sample >> stringtie_gtflist.txt;done
-       stringtie -p {resources.cpus_per_task} --merge stringtie_gtflist.txt -o {output}
+       for sample in {input}; do echo $sample >> {output.gtflist};done
+       stringtie -p {resources.cpus_per_task} --merge {output.gtflist} -o {output.gtf}
        """       
