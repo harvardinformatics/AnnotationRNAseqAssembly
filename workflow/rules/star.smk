@@ -8,13 +8,13 @@ rule star_1stpass:
     input:
         r1 = input_function_r1,
         r2 = input_function_r2,
-        index=config["StarIndexDir"] + "SA"
+        index="results/starindex/SA"
     output:
         "results/star1stpass/" + "{sample}" + "_STAR1stpassSJ.out.tab"
     conda:
         "../envs/star.yml"
     params:
-        indexdir = config["StarIndexDir"]
+        indexdir = "results/starindex/"
     shell:
         """
         rm -rf results/star1stpass/{wildcards.sample}_1stpassSTARtmp
@@ -29,13 +29,13 @@ rule star_2ndpass:
         tablelist = expand("results/star1stpass/{sample}_STAR1stpassSJ.out.tab",sample=SAMPLES),
         r1 = input_function_r1,
         r2 = input_function_r2,
-        index=config["StarIndexDir"] + "SA"
+        index="results/starindex/SA"
     output:
         "results/star2ndpass/" + "{sample}" + "_STAR2ndpassAligned.out.sam"
     conda:
         "../envs/star.yml"
     params:
-        indexdir = config["StarIndexDir"],
+        indexdir = "results/starindex/",
         tablestring = ' '.join(expand("results/star1stpass/{sample}_STAR1stpassSJ.out.tab", sample=SAMPLES))
     shell:
         """
