@@ -3,6 +3,5 @@ sampleTable: "samplesheet.tsv"
 genome: "test/genome/dmel_NC_004353.4_genome.fa"
 blastdbase: "test/dmel_NCBI_prot/GCF_000001215.4_Release_6_plus_ISO1_MT_protein.faa"
 aligner: "STAR"
-StarIndexExists: False
 StarIndexDir: "results/starindex/"
 strandedness: '' # options are "rf" for dUTP, "fr' for ligation-stranded e.g. Illumina TruSeq, or "" for unknown or unstranded

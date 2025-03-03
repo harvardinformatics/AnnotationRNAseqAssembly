@@ -23,8 +23,7 @@ for i in range(len(SAMPLES)):
     sample2fastq[sampleinfo["sampleid"][i]] = {'r1': sampleinfo["R1"][i],'r2': sampleinfo["R2"][i]}
 
 
-if config["aligner"] in ["STAR","star"]:
-    system("mkdir -p results/star2ndpass/tmp")
+system("mkdir -p results/star2ndpass/tmp")
 
 rule all:
     input:
@@ -36,5 +35,4 @@ include: "rules/star.smk"
 include: "rules/stringtie.smk"
 include: "rules/transdecoder.smk"
 include: "rules/add_cds.smk"
-if config["StarIndexExists"] == False:
-    include: "rules/starindex.smk"
+include: "rules/starindex.smk"
