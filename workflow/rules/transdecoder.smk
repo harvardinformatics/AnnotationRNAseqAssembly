@@ -1,3 +1,8 @@
+def getBlastOutfileList(wildcards):
+   checkpoint_output = checkpoints.split_longestorfs_fasta.get(**wildcards).output[0]
+   return expand("results/transdecoder/blastp/blastp_chunk{i}.tsv",
+             i=glob_wildcards(os.path.join(checkpoint_output, "longest_orfs_chunk{i}.fasta")).i)
+
 localrules: transdecoder_orfs2genomegff3,concat_blastp_outputs, split_longestorfs_fasta
 
 rule build_transcriptome_fasta:
@@ -62,10 +67,6 @@ rule blastp_longestorfs:
         -query {input} -outfmt 6 -db {params.dbase} > {output}
         """
 
-def getBlastOutfileList(wildcards):
-   checkpoint_output = checkpoints.split_longestorfs_fasta.get(**wildcards).output[0]
-   return expand("results/transdecoder/blastp/blastp_chunk{i}.tsv",
-             i=glob_wildcards(os.path.join(checkpoint_output, "longest_orfs_chunk{i}.fasta")).i)
 
 rule concat_blastp_outputs:
     input:
