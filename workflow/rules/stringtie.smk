@@ -29,7 +29,6 @@ rule stringtie_merge:
         "../envs/stringtie.yml"
     shell:
        """
-       rm -f stringtie_gtflist.txt
        for sample in {input}; do echo $sample >> {output.gtflist};done
        stringtie -p {resources.cpus_per_task} --merge {output.gtflist} -o {output.gtf}
        """       
