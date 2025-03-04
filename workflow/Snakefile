@@ -6,22 +6,10 @@ import os.path
 from numpy import log2,median
 import gzip
 
-try:
-    from itertools import izip_longest
-except ImportError: 
-    from itertools import zip_longest as izip_longest
-
-
-
-
 configfile: "config/config.yaml"
 
 sampleinfo = pd.read_table(config["sampleTable"])
 SAMPLES=list(sampleinfo.loc[:,"sampleid"])
-sample2fastq = {}
-for i in range(len(SAMPLES)):
-    sample2fastq[sampleinfo["sampleid"][i]] = {'r1': sampleinfo["R1"][i],'r2': sampleinfo["R2"][i]}
-
 
 system("mkdir -p results/star2ndpass/tmp")
 
