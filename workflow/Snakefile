@@ -11,6 +11,9 @@ configfile: "config/config.yaml"
 sampleinfo = pd.read_table(config["sampleTable"])
 SAMPLES=list(sampleinfo.loc[:,"sampleid"])
 
+if config["star_index_dir"] == "":
+    config["star_index_dir"] = "results/star_index/"
+    
 system("mkdir -p results/star2ndpass/tmp")
 
 rule all:
