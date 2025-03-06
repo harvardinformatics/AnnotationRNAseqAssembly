@@ -9,9 +9,9 @@ def get_star_SAindexNbases():
 
 rule star_index:
     input:
-        config["genome"]
+        str(config["genome"])
     output:
-        config["star_index_dir"] + "SA"
+        "{}SA".format(config["star_index_dir"])
     conda:
         "../envs/star.yml"
     threads: 24
