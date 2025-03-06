@@ -60,7 +60,7 @@ rule blastp_longestorfs:
     conda:
         "../envs/blast.yml"
     params:
-        dbase=config["blastdbase"]
+        dbase=str(config["blastdbase"])
     shell:
         """
         blastp -max_target_seqs 5 -num_threads {resources.cpus_per_task}  -evalue 1e-4 \
