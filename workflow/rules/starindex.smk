@@ -1,5 +1,5 @@
 def get_star_SAindexNbases():
-    genome = open(str(config["genome"]),"r")
+    genome = open(config["genome"],"r")
     genome_length = 0
     for line in genome:
         if line[0] != ">":
@@ -9,7 +9,7 @@ def get_star_SAindexNbases():
 
 rule star_index:
     input:
-        str(config["genome"])
+        config["genome"]
     output:
         "{}SA".format(config["star_index_dir"])
     conda:
