@@ -1,5 +1,5 @@
 def get_star_SAindexNbases():
-    genome = open(config["genome"],"r")
+    genome = open(str(config["genome"]),"r")
     genome_length = 0
     for line in genome:
         if line[0] != ">":
