@@ -8,12 +8,15 @@ import gzip
 from pathlib import Path
 configfile: "config/config.yaml"
 
+genome_path = Path(config["genome"])
+blastdb_path = Path(config["blastdbase"])
+
 sampleinfo = pd.read_table(config["sampleTable"])
 SAMPLES=list(sampleinfo.loc[:,"sampleid"])
 
 if config["star_index_dir"] == "":
     config["star_index_dir"] = "results/star_index/"
-    
+
 system("mkdir -p results/star2ndpass/tmp")
 
 rule all:
