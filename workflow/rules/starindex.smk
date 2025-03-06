@@ -11,13 +11,13 @@ rule star_index:
     input:
         config["genome"]
     output:
-        config["StarIndexDir"] + "SA"
+        config["star_index_dir"] + "SA"
     conda:
         "../envs/star.yml"
     threads: 24
     params:
         nbases=get_star_SAindexNbases(),
-        outdir=config["StarIndexDir"]
+        outdir=config["star_index_dir"]
     shell:
         """
         STAR --runMode genomeGenerate --genomeSAindexNbases {params.nbases} \
