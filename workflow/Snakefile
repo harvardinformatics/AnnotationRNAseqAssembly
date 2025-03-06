@@ -5,7 +5,7 @@ import pandas as pd
 import os.path
 from numpy import log2,median
 import gzip
-
+from pathlib import Path
 configfile: "config/config.yaml"
 
 sampleinfo = pd.read_table(config["sampleTable"])
