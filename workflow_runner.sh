@@ -2,7 +2,7 @@
 #SBATCH -J snaketest
 #SBATCH -n 1                 
 #SBATCH -t 72:00:00        
-#SBATCH -p shared,unrestricted,sapphire      
+#SBATCH -p "" # add the partition here      
 #SBATCH --mem=2000           
 #SBATCH -o logs/test.%A.out  
 #SBATCH -e logs/test.%A.err  
