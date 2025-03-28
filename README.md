@@ -8,6 +8,10 @@ This repository consists of a Snakemake workflow to produce a CDS-annotated geno
 * Adds back into the TransDecoder annotation those features for which open reading framers(ORFs) could not be found
   * TransDecoder normally discards things w/o detectable ORFs which we view as being less than ideal, so we fix that
 
+Details of the workflow, and the order of operations are visualized in the directed acyclic graph (DAG) of the workflow, shown below.
+
+<img src="./docs/img/dag.png" alt="snpArcher logo" height="300"/>
+
 
 To run the workflow, you need to create a directory called *data* directory within the workflow base directory that contains three subdirectories:
 
