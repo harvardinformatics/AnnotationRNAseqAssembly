@@ -10,8 +10,9 @@ This repository consists of a Snakemake workflow to produce a CDS-annotated geno
 
 Details of the workflow, and the order of operations are visualized in the directed acyclic graph (DAG) of the workflow, shown below.
 
-<img src="./docs/img/dag.png" alt="snpArcher logo" height="300"/>
-
+<p align="center">
+    <img src="./docs/img/dag.png" alt="snpArcher logo" height="600"/>
+</p>
 
 To run the workflow, you need to create a directory called *data* directory within the workflow base directory that contains three subdirectories:
 
