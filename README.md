@@ -8,11 +8,6 @@ This repository consists of a Snakemake workflow to produce a CDS-annotated geno
 * Adds back into the TransDecoder annotation those features for which open reading framers(ORFs) could not be found
   * TransDecoder normally discards things w/o detectable ORFs which we view as being less than ideal, so we fix that
 
-Details of the workflow, and the order of operations are visualized in the directed acyclic graph (DAG) of the workflow, shown below.
-
-<p align="center">
-    <img src="./docs/img/dag.png" alt="snpArcher logo" height="600"/>
-</p>
 
 To run the workflow, you need to create a directory called *data* directory within the workflow base directory that contains three subdirectories:
 
@@ -24,15 +19,40 @@ You then need to:
 * edit *sampletable.tsv* so it specifies your sample ids, and the full path names of the R1 and R2 fastq files for each sample. Note, if you wish to point to RNA-seq fastq files to a different location other than *data/fastq*, you need to do it in the sample sheet, in which case creating the *data/fastq* directory will not be necessary.
 * edit *config/config.yaml*, especially if you are already supplying a STAR index--therefore need to indicate its location, and set *StarIndexExists* to TRUE, but you also need to supply the genome fasta file name (assuming it resides in  *data/genome*), and the prefix of the files in the protein blast database.
 * if you are running the workflow on an HPC cluster, you will need to specify slurm partition names in *profiles/slurm/config.yaml*.
-
-You can then execute the Snakemake worflow as follows:
+ 
+Note that the yaml file in *profiles/slurm* is a workflow-specific profile that sets resources related to rules that are used to execute particular workflow steps. This is distinct from a global profile, which sets options for the cluster environment in which the workflow is being executed. On a linux system, one's global profile will typically located in your home directory, e.g. `$HOME/.config/snakemake`. An example global profile for a cluster running SLURM might look like this, and would be called, somewhat confusingly, *config.yaml*: 
 
 ```bash
-snakemake --snakefile workflow/Snakefile --profile ./profiles/slurm
+executor: slurm
+use-conda: True
+jobs: 100
+latency-wait: 100
+retries: 0
+
+
+default-resources:
+    slurm_account: "" # add your account here
+    slurm_partition: "" # add your partition list here
+    runtime: 360 
+    mem_mb: 6000
+    threads: 1
 ```
 
-This command can easily be wrapped as a cluster submission job. As it simply manages conda package installs, submission of cluster data analysis jobs, and runs some low-memory serial jobs for file conversions, it can be submitted with one core, and with a modest amount of memory, e.g. a few Gb.
+If you do not need to modify a global profile from the defaults, then all that is needed is to specify the workflow profile.In this case, you can then execute the Snakemake worflow as follows:
 
-## Testing 
-A small test data set using four RNA-seq paired-end libraries and one chromosome for *Drosophila melanogaster* are located in the **test** directory. The *config.yaml* file in the **config** directory as well as *samplesheet.tsv* currently point to data found in **test/**. This data set should take less than 10 minutes to execute assuming your wait times for SLURM jobs to run isn't long. To run this workflow on your own data, as alluded to above, you should create a **data** directory and make sure your config file and the sample sheet point to the correct location of your data. 
+```bash
+snakemake --snakefile workflow/Snakefile --workflow-profile ./profiles/slurm
+```
+
+If you also needed to specify a particular global profile, if you put the global profile yaml file in a directory called `my_global` and placed that directory in `$HOME/.config/snakemake/`, you could then specify both the local and the qworkflow-specific profile like this:
+
+
+```bash
+snakemake --snakefile workflow/Snakefile --workflow-profile ./profiles/slurm --profile my_global
+```
+
+For more information on global and workflow profiles consult the [Snakemake profiles documentation](https://snakemake.readthedocs.io/en/stable/executing/cli.html#executing-profiles).
+
+With either of these options, the command can easily be wrapped as a cluster submission job. As it simply manages conda package installs, submission of cluster data analysis jobs, and runs some low-memory serial jobs for file conversions, it can be submitted with one core, and with a modest amount of memory, e.g. a few Gb.
+
 
