@@ -3,7 +3,7 @@ def getBlastOutfileList(wildcards):
    return expand("results/transdecoder/blastp/blastp_chunk{i}.tsv",
              i=glob_wildcards(os.path.join(checkpoint_output, "longest_orfs_chunk{i}.fasta")).i)
 
-localrules: transdecoder_orfs2genomegff3,concat_blastp_outputs, split_longestorfs_fasta
+localrules: transdecoder_orfs2genomegff3,concat_blastp_outputs, split_longestorfs_fasta, predict_mover
 
 rule build_transcriptome_fasta:
     input:
@@ -11,7 +11,7 @@ rule build_transcriptome_fasta:
     output:
          "results/transdecoder/stringtie_cdna.fa"
     conda:
-        "../envs/transdecoder.yml"
+        "../envs/td2.yml"
     params:
         genome=config["genome"] 
     shell:
@@ -23,7 +23,7 @@ rule convert_gtf2gff3:
     output:
         "results/transdecoder/stringtie_merged.gff3"
     conda:
-        "../envs/transdecoder.yml"
+        "../envs/td2.yml"
     shell:
         "workflow/scripts/gtf_to_alignment_gff3.pl {input} > {output}"
 
@@ -33,7 +33,7 @@ rule transdecoder_longorfs:
     output:
         "results/transdecoder/longest_orfs.pep"
     conda:
-        "../envs/transdecoder.yml"
+        "../envs/td2.yml"
     shell:
         """
         rm results/transdecoder/longest_orfs.pep
@@ -48,7 +48,7 @@ checkpoint split_longestorfs_fasta:
     output:
         directory("results/transdecoder/blastp/chunks/")
     conda:
-        "../envs/transdecoder.yml"
+        "../envs/td2.yml"
     shell:
        """
         python workflow/scripts/FastaSplitter.py -f {input} -maxn 1000 -o {output}
@@ -86,11 +86,34 @@ rule transdecoder_predict:
         stringtie_fasta="results/transdecoder/stringtie_cdna.fa",
         blasthits="results/transdecoder/blastp/longorfs_blastp_concat.tsv" 
     output:
-        "results/transdecoder/stringtie_cdna.fa.transdecoder.gff3"
+        gff3="stringtie_cdna.fa.transdecoder.gff3",
+        bed="stringtie_cdna.fa.transdecoder.bed",
+        cds="stringtie_cdna.fa.transdecoder.cds",
+        pep="stringtie_cdna.fa.transdecoder.pep"
     conda:
-        "../envs/transdecoder.yml"
+        "../envs/td2.yml"
     shell:
-        "TransDecoder.Predict -t {input.stringtie_fasta} --single_best_only --retain_blastp_hits {input.blasthits} -O results/transdecoder" 
+        "TD2.Predict -t {input.stringtie_fasta} --single_best_only --retain_blastp_hits {input.blasthits} -O results/transdecoder"
+
+rule predict_mover:
+    input:
+        gff3="stringtie_cdna.fa.transdecoder.gff3",
+        bed="stringtie_cdna.fa.transdecoder.bed",
+        cds="stringtie_cdna.fa.transdecoder.cds",
+        pep="stringtie_cdna.fa.transdecoder.pep"
+    output:
+        "results/transdecoder/stringtie_cdna.fa.transdecoder.gff3",
+        "results/transdecoder/"stringtie_cdna.fa.transdecoder.bed",
+        "results/transdecoder/"stringtie_cdna.fa.transdecoder.cds",
+        "results/transdecoder/stringtie_cdna.fa.transdecoder.pep"
+
+    shell:
+        """
+        mv {input.gff3} results/transdecoder
+        mv {input.bed} results/transdecoder
+        mv {input.cds} results/transdecoder
+        mv {input.pep} results/transdecoder
+        """
 
 rule transdecoder_orfs2genomegff3:
     input:
@@ -100,7 +123,7 @@ rule transdecoder_orfs2genomegff3:
     output:
         "results/transdecoder/stringtie_transdecoder_genomecoords.gff3"    
     conda:
-        "../envs/transdecoder.yml"
+        "../envs/td2.yml"
     shell:
         """
         workflow/scripts/cdna_alignment_orf_to_genome_orf.pl {input.cdnagff3} \
