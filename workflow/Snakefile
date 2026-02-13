@@ -24,9 +24,12 @@ rule all:
         "results/stringtie/stringtie_merged_wCDSfeatures.gff3"
     default_target: True
 
+if config['td2'] == True:
+    include: "rules/transdecoder_td2.smk"
+else:
+    include: "rules/transdecoder.smk"
 
 include: "rules/star.smk"
 include: "rules/stringtie.smk"
-include: "rules/transdecoder.smk"
 include: "rules/add_cds.smk"
 include: "rules/starindex.smk"

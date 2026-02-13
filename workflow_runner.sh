@@ -2,18 +2,21 @@
 #SBATCH -J snaketest
 #SBATCH -n 1                 
 #SBATCH -t 72:00:00        
-#SBATCH -p "" # add the partition here      
+#SBATCH -p sapphire,shared    
 #SBATCH --mem=2000           
 #SBATCH -o logs/test.%A.out  
 #SBATCH -e logs/test.%A.err  
 
 module purge
 module load python
-mamba activate snakemake_py311
+conda activate snakemake
 
-global_profile=$1 # full path to directory where global config.yaml lives, e.g. <your home dir>/.config/snakemake/cannon/
+conda_prefix=$1 # where to install conda environments, useful to avoid filling up home directory
+global_snakemake_profile=$2 # this is the name of the directory for your global snakemake profile  that is usually a subdirectory in  $HOME/.config/snakemake/
 
-snakemake -p --snakefile workflow/Snakefile --use-conda --profile $global_profile --workflow-profile ./profiles/slurm
+snakemake --unlock --snakefile workflow/Snakefile --configfile config/config.yaml --use-conda --workflow-profile profiles/slurm --profile $global_snakemake_profile
+
+snakemake --conda-prefix $conda_prefix --snakefile workflow/Snakefile --configfile config/config.yaml --use-conda --workflow-profile profiles/slurm --profile cannon
 
 
 
