@@ -1,7 +1,6 @@
 channels:
     - conda-forge
     - bioconda
-    - defaults
 
 dependencies:
     - stringtie==2.2.2

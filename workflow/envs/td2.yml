@@ -3,5 +3,9 @@ channels:
     - bioconda
 
 dependencies:
-    - star==2.7.11b
+    - python=3.11
+    - transdecoder==5.7.1
     - biopython==1.83
+    - pip
+    - pip:
+        - TD2

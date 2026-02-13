@@ -15,7 +15,7 @@ rule build_transcriptome_fasta:
     params:
         genome=config["genome"] 
     shell:
-        "workflow/scripts/gtf_genome_to_cdna_fasta.pl {input} {params.genome} > {output}"
+        "$CONDA_PREFIX/opt/transdecoder/util/gtf_genome_to_cdna_fasta.pl {input} {params.genome} > {output}"
 
 rule convert_gtf2gff3:
     input:
@@ -25,7 +25,7 @@ rule convert_gtf2gff3:
     conda:
         "../envs/td2.yml"
     shell:
-        "workflow/scripts/gtf_to_alignment_gff3.pl {input} > {output}"
+        "$CONDA_PREFIX/opt/transdecoder/util/gtf_to_alignment_gff3.pl {input} > {output}"
 
 rule transdecoder_longorfs:
     input:
@@ -36,15 +36,12 @@ rule transdecoder_longorfs:
         "../envs/td2.yml"
     shell:
         """
-        rm results/transdecoder/longest_orfs.pep
-        rm results/transdecoder/longest_orfs.cds
-        rm results/transdecoder/longest_orfs.gff3 
         TD2.LongOrfs -t {input} -O results/transdecoder
         """
 
 checkpoint split_longestorfs_fasta:
     input:
-        "results/transdecoder/stringtie_cdna.fa.transdecoder_dir/longest_orfs.pep"
+        "results/transdecoder/longest_orfs.pep"
     output:
         directory("results/transdecoder/blastp/chunks/")
     conda:
@@ -86,26 +83,26 @@ rule transdecoder_predict:
         stringtie_fasta="results/transdecoder/stringtie_cdna.fa",
         blasthits="results/transdecoder/blastp/longorfs_blastp_concat.tsv" 
     output:
-        gff3="stringtie_cdna.fa.transdecoder.gff3",
-        bed="stringtie_cdna.fa.transdecoder.bed",
-        cds="stringtie_cdna.fa.transdecoder.cds",
-        pep="stringtie_cdna.fa.transdecoder.pep"
+        gff3="stringtie_cdna.fa.TD2.gff3",
+        bed="stringtie_cdna.fa.TD2.bed",
+        cds="stringtie_cdna.fa.TD2.cds",
+        pep="stringtie_cdna.fa.TD2.pep"
     conda:
         "../envs/td2.yml"
     shell:
-        "TD2.Predict -t {input.stringtie_fasta} --single_best_only --retain_blastp_hits {input.blasthits} -O results/transdecoder"
+        "TD2.Predict -t {input.stringtie_fasta} --retain-blastp_hits {input.blasthits} -O results/transdecoder"
 
 rule predict_mover:
     input:
-        gff3="stringtie_cdna.fa.transdecoder.gff3",
-        bed="stringtie_cdna.fa.transdecoder.bed",
-        cds="stringtie_cdna.fa.transdecoder.cds",
-        pep="stringtie_cdna.fa.transdecoder.pep"
+        gff3="stringtie_cdna.fa.TD2.gff3",
+        bed="stringtie_cdna.fa.TD2.bed",
+        cds="stringtie_cdna.fa.TD2.cds",
+        pep="stringtie_cdna.fa.TD2.pep"
     output:
-        "results/transdecoder/stringtie_cdna.fa.transdecoder.gff3",
-        "results/transdecoder/"stringtie_cdna.fa.transdecoder.bed",
-        "results/transdecoder/"stringtie_cdna.fa.transdecoder.cds",
-        "results/transdecoder/stringtie_cdna.fa.transdecoder.pep"
+        "results/transdecoder/stringtie_cdna.fa.TD2.gff3",
+        "results/transdecoder/stringtie_cdna.fa.TD2.bed",
+        "results/transdecoder/stringtie_cdna.fa.TD2.cds",
+        "results/transdecoder/stringtie_cdna.fa.TD2.pep"
 
     shell:
         """
@@ -117,7 +114,7 @@ rule predict_mover:
 
 rule transdecoder_orfs2genomegff3:
     input:
-        cdnagff3="results/transdecoder/stringtie_cdna.fa.transdecoder.gff3",
+        cdnagff3="results/transdecoder/stringtie_cdna.fa.TD2.gff3",
         stiegff3="results/transdecoder/stringtie_merged.gff3",
         tsfasta="results/transdecoder/stringtie_cdna.fa"
     output:
@@ -126,7 +123,7 @@ rule transdecoder_orfs2genomegff3:
         "../envs/td2.yml"
     shell:
         """
-        workflow/scripts/cdna_alignment_orf_to_genome_orf.pl {input.cdnagff3} \
+        $CONDA_PREFIX/opt/transdecoder/util/cdna_alignment_orf_to_genome_orf.pl {input.cdnagff3} \
         {input.stiegff3} {input.tsfasta} > {output}
         """
            
