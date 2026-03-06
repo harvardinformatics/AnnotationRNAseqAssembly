@@ -15,6 +15,8 @@ rule stringtie:
          "results/stringtie/{sample}_stringtie.gtf"
     conda:
         "../envs/stringtie.yml"
+    resources:
+        runtime = 720
     params:
         strandedness=(lambda s: '--rf' if s == 'rf' else ('--fr' if s == 'fr' else ''))(config['strandedness'])
     shell:
@@ -27,6 +29,8 @@ rule stringtie_merge:
         gtf="results/stringtie/stringtie_merged.gtf"
     conda:
         "../envs/stringtie.yml"
+    resources:
+        runtime = 360
     shell:
        """
        for sample in {input}; do echo $sample >> {output.gtflist};done

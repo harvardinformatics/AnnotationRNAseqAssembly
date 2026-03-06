@@ -15,6 +15,8 @@ rule star_1stpass:
         "../envs/star.yml"
     params:
         indexdir = config["star_index_dir"]
+    resources:
+        runtime = 1920
     shell:
         """
         rm -rf results/star1stpass/{wildcards.sample}_1stpassSTARtmp
@@ -34,6 +36,8 @@ rule star_2ndpass:
         "results/star2ndpass/" + "{sample}" + "_STAR2ndpassAligned.out.sam"
     conda:
         "../envs/star.yml"
+    resources:
+        runtime = 1920
     params:
         indexdir = config["star_index_dir"],
         tablestring = ' '.join(expand("results/star1stpass/{sample}_STAR1stpassSJ.out.tab", sample=SAMPLES))
@@ -56,6 +60,8 @@ rule samsort_star:
         "results/star2ndpass/sorted_" + "{sample}" + "_STAR2ndpassAligned.out.bam"
     conda:
         "../envs/samtools.yml"
+    resources:
+        runtime = 360
     shell:
         """
         rm -f results/star2ndpass/tmp/{wildcards.sample}.aln.sorted*bam

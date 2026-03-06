@@ -12,6 +12,8 @@ rule build_transcriptome_fasta:
          "results/transdecoder/stringtie_cdna.fa"
     conda:
         "../envs/transdecoder.yml"
+    resources:
+        runtime = 60
     params:
         genome=config["genome"] 
     shell:
@@ -24,6 +26,8 @@ rule convert_gtf2gff3:
         "results/transdecoder/stringtie_merged.gff3"
     conda:
         "../envs/transdecoder.yml"
+    resources:
+        runtime = 60
     shell:
         "gtf_to_alignment_gff3.pl {input} > {output}"
 
@@ -34,6 +38,8 @@ rule transdecoder_longorfs:
         "results/transdecoder/stringtie_cdna.fa.transdecoder_dir/longest_orfs.pep"
     conda:
         "../envs/transdecoder.yml"
+    resources:
+        runtime = 1430
     shell:
         """
         rm -rf {input}.transdecoder_dir/ 
@@ -59,6 +65,8 @@ rule blastp_longestorfs:
         "results/transdecoder/blastp/blastp_chunk{chunk}.tsv"
     conda:
         "../envs/blast.yml"
+    resources:
+        runtime = 480
     params:
         dbase=config["blastdbase"]
     shell:
@@ -87,6 +95,8 @@ rule transdecoder_predict:
         "results/transdecoder/stringtie_cdna.fa.transdecoder.gff3"
     conda:
         "../envs/transdecoder.yml"
+    resources:
+        runtime = 960
     shell:
         "TransDecoder.Predict -t {input.stringtie_fasta} --single_best_only --retain_blastp_hits {input.blasthits} -O results/transdecoder" 
 

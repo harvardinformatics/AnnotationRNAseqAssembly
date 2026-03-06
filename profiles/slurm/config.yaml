@@ -1,79 +1,65 @@
 set-threads:
-    star_1stpass: 8
-    star_2ndpass: 8
-    star_index: 24
-    samsort_star: 12
-    stringtie: 13
-    stringtie_merge: 1
-    build_transcriptome_fasta: 1
-    convert_gtf2gff3: 1
-    transdecoder_longorfs: 1
-    blastp_longestorfs: 16
-    transdecoder_predict: 1
+  star_1stpass: 8
+  star_2ndpass: 8
+  star_index: 24
+  samsort_star: 12
+  stringtie: 13
+  stringtie_merge: 1
+  build_transcriptome_fasta: 1
+  convert_gtf2gff3: 1
+  transdecoder_longorfs: 1
+  blastp_longestorfs: 16
+  transdecoder_predict: 1
 
 set-resources:
-    # STAR spliced-alignment
-    star_index:
-        nodes: 1
-        tasks: 1
-        cpus_per_task: 24
-        mem_mb: 100000
-        runtime: 960
-    star_1stpass:
-        nodes: 1
-        tasks: 1
-        cpus_per_task: 8
-        mem_mb: 64000
-        runtime: 1920
-    star_2ndpass:
-        nodes: 1
-        tasks: 1
-        cpus_per_task: 8
-        mem_mb: 64000
-        runtime: 1920
-    samsort_star:
-        nodes: 1
-        tasks: 1
-        cpus_per_task: 12
-        mem_mb: 24000
-        runtime: 360
-    stringtie:
-        nodes: 1
-        tasks: 1
-        cpus_per_task: 4
-        mem_mb: 32000
-        runtime: 720
-    stringtie_merge:
-        nodes: 1
-        tasks: 1
-        cpus_per_task: 1
-        mem_mb: 20000
-        runtime: 360
-    build_transcriptome_fasta:
-        nodes: 1
-        tasks: 1
-        mem_mb: 5000
-        runtime: 60
-    convert_gtf2gff3:
-        nodes: 1
-        tasks: 1
-        mem_mb: 5000
-        runtime: 60
-    transdecoder_longorfs:
-        nodes: 1
-        tasks: 1
-        mem_mb: 5000
-        runtime: 1430
-    blastp_longestorfs:
-        nodes: 1
-        tasks: 1
-        cpus_per_task: 16
-        mem_mb: 8000
-        runtime: 480
-    transdecoder_predict:
-        nodes: 1
-        tasks: 1
-        mem_mb: 15000
-        runtime: 960
-                
-
+  star_index:
+    nodes: 1
+    tasks: 1
+    cpus_per_task: 24
+    mem_mb: 100000
+  star_1stpass:
+    nodes: 1
+    tasks: 1
+    cpus_per_task: 8
+    mem_mb: 64000
+  star_2ndpass:
+    nodes: 1
+    tasks: 1
+    cpus_per_task: 8
+    mem_mb: 64000
+  samsort_star:
+    nodes: 1
+    tasks: 1
+    cpus_per_task: 12
+    mem_mb: 24000
+  stringtie:
+    nodes: 1
+    tasks: 1
+    cpus_per_task: 4
+    mem_mb: 32000
+  stringtie_merge:
+    nodes: 1
+    tasks: 1
+    cpus_per_task: 1
+    mem_mb: 20000
+  build_transcriptome_fasta:
+    nodes: 1
+    tasks: 1
+    mem_mb: 5000
+  convert_gtf2gff3:
+    nodes: 1
+    tasks: 1
+    mem_mb: 5000
+  transdecoder_longorfs:
+    nodes: 1
+    tasks: 1
+    mem_mb: 5000
+  blastp_longestorfs:
+    nodes: 1
+    tasks: 1
+    cpus_per_task: 16
+    mem_mb: 8000
+  transdecoder_predict:
+    nodes: 1
+    tasks: 1
+    mem_mb: 15000

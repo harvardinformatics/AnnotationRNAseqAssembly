@@ -15,6 +15,8 @@ rule star_index:
     conda:
         "../envs/star.yml"
     threads: 24
+    resources:
+        runtime = 960
     params:
         nbases=get_star_SAindexNbases(),
         outdir=config["star_index_dir"]
