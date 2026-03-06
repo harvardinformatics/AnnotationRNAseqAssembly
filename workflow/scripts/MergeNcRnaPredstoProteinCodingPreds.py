@@ -6,25 +6,67 @@ import re
 fields = ['seqid', 'source', 'type', 'start',
           'end', 'score', 'strand', 'phase', 'attributes']
 
+def ParseGffLikeLine(line):
+    """
+    Parse a GFF/GTF-like line into the global `fields` dict.
+    Returns None for comment/blank/malformed lines.
+    """
+    if not line or line.startswith('#') or line.strip() == '':
+        return None
+
+    parts = line.rstrip('\n').split('\t')
+    if len(parts) != len(fields):
+        parts = line.strip().split()
+    if len(parts) != len(fields):
+        return None
+
+    return dict(zip(fields, parts))
+
+def CleanTdecGff3Line(line):
+    """
+    Clean TD2-specific noise from attributes (column 9) only.
+    Preserve all other GFF3 columns, especially strand (column 7).
+    """
+    cleaned = re.sub("\\^.*?\\^", "", line.strip())
+    columns = cleaned.split('\t')
+    if len(columns) != len(fields):
+        return cleaned
+
+    attributes = columns[8]
+    attributes = attributes.split('|')[0]
+    attributes = attributes.split(',score')[0]
+    attributes = attributes.replace('"', '')
+    attributes = attributes.replace('+', '')
+    attributes = attributes.replace('-', '')
+    attributes = attributes.replace('-;', ';')
+    attributes = attributes.replace(' ', '_')
+    attributes = attributes.split('(')[0]
+    attributes = attributes.rstrip(';')
+    columns[8] = attributes
+
+    return '\t'.join(columns)
+
 def CreateGeneIntervalDict(gff3):
     genedict = {}
     with open(gff3,'r') as fopen:
         for line in fopen:
-            if line[0] != '#':
-                linedict = dict(zip(fields,line.strip().split('\t')))
-                if linedict['type'] == 'transcript':
-                    linedict['attributes'] = linedict['attributes'].split(';')[1].replace('geneID=','ID=')
-                    geneid = linedict['attributes'].split('=')[1]
-                 
-                    if geneid not in genedict:
-                        genedict[geneid] = linedict
-                        genedict[geneid]['type'] = 'gene'
+            linedict = ParseGffLikeLine(line)
+            if linedict is None:
+                continue
 
-                    else:
-                        start = min(int(linedict['start']),int(genedict[geneid]['start']))
-                        end = max(int(linedict['end']),int(genedict[geneid]['end']))
-                        genedict[geneid]['start'] =  start
-                        genedict[geneid]['end'] =  end
+            if linedict['type'] == 'transcript':
+                linedict['attributes'] = linedict['attributes'].split(';')[1].replace('geneID=','ID=')
+                geneid = linedict['attributes'].split('=')[1]
+             
+                if geneid not in genedict:
+                    genedict[geneid] = linedict
+                    genedict[geneid]['type'] = 'gene'
+
+                else:
+                    start = min(int(linedict['start']),int(genedict[geneid]['start']))
+                    end = max(int(linedict['end']),int(genedict[geneid]['end']))
+                    genedict[geneid]['start'] =  start
+                    genedict[geneid]['end'] =  end
     
     return genedict                       
 
@@ -83,28 +125,30 @@ if __name__=="__main__":
 
     tdec_open = open(opts.tdecgff3,'r')
     for line in tdec_open:
-        if line[0] != '#' and line !="\n":
-            linedict = dict(zip(fields,line.strip().split()))
-            attribute_dict = ParseTdecoderAttributes(linedict)
-            if linedict['type'] == 'gene':
-                tdec_gene_dict[attribute_dict['ID']] = line
-            elif linedict['type'] == 'mRNA':
-                tdec_transcript_dict[attribute_dict['ID']] = {}
-                tdec_transcript_dict[attribute_dict['ID']]['mRNA'] = line
-                tdec_transcript_dict[attribute_dict['ID']]['exons'] = []
-                tdec_transcript_dict[attribute_dict['ID']]['cds'] = []
-                tdec_transcript_dict[attribute_dict['ID']]['three_prime_UTR'] = []  
-                tdec_transcript_dict[attribute_dict['ID']]['five_prime_UTR'] = [] 
-            elif linedict['type'] == 'exon':
-                tdec_transcript_dict[attribute_dict['Parent']]['exons'].append(line)
-            elif linedict['type'] =='CDS':
-                tdec_transcript_dict[attribute_dict['Parent']]['cds'].append(line)
-            elif linedict['type'] == 'three_prime_UTR':
-                tdec_transcript_dict[attribute_dict['Parent']]['three_prime_UTR'].append(line)
-            elif linedict['type'] == 'five_prime_UTR':
-                tdec_transcript_dict[attribute_dict['Parent']]['five_prime_UTR'].append(line)
-            else:
-                raise ValueError('{} not a valid stringtie feature type'.format(linedict['type']))
+        linedict = ParseGffLikeLine(line)
+        if linedict is None:
+            continue
+
+        attribute_dict = ParseTdecoderAttributes(linedict)
+        if linedict['type'] == 'gene':
+            tdec_gene_dict[attribute_dict['ID']] = line
+        elif linedict['type'] == 'mRNA':
+            tdec_transcript_dict[attribute_dict['ID']] = {}
+            tdec_transcript_dict[attribute_dict['ID']]['mRNA'] = line
+            tdec_transcript_dict[attribute_dict['ID']]['exons'] = []
+            tdec_transcript_dict[attribute_dict['ID']]['cds'] = []
+            tdec_transcript_dict[attribute_dict['ID']]['three_prime_UTR'] = []  
+            tdec_transcript_dict[attribute_dict['ID']]['five_prime_UTR'] = [] 
+        elif linedict['type'] == 'exon':
+            tdec_transcript_dict[attribute_dict['Parent']]['exons'].append(line)
+        elif linedict['type'] =='CDS':
+            tdec_transcript_dict[attribute_dict['Parent']]['cds'].append(line)
+        elif linedict['type'] == 'three_prime_UTR':
+            tdec_transcript_dict[attribute_dict['Parent']]['three_prime_UTR'].append(line)
+        elif linedict['type'] == 'five_prime_UTR':
+            tdec_transcript_dict[attribute_dict['Parent']]['five_prime_UTR'].append(line)
+        else:
+            raise ValueError('{} not a valid stringtie feature type'.format(linedict['type']))
 
     merge_out = open('{}_wCDSfeatures.gff3'.format(opts.gtf.replace('.gtf','')),'w')
     final_open = open('{}'.format(opts.gtf.replace('gtf','gff3')),'r')
@@ -113,15 +157,17 @@ if __name__=="__main__":
     seen_tdec_transcripts = set()
 
     for line in final_open:
-        if line[0] =='#':
+        if line.startswith('#'):
             merge_out.write(line)
         else:
-            linedict = dict(zip(fields,line.strip().split('\t')))
+            linedict = ParseGffLikeLine(line)
+            if linedict is None:
+                continue
             attribute_dict = ParseStringtieAttributes(linedict)
             if linedict['type'] == 'transcript':
                 # write gene level protein coding feature
                 if attribute_dict['Parent'] in tdec_gene_dict and attribute_dict['Parent'] not in seen_tdec_genes: #first time sees gene id in a transcript
-                    merge_out.write('{}\n'.format(re.sub("\\^.*?\\^","",tdec_gene_dict[attribute_dict['Parent']].strip().split('|')[0]).replace('+','').replace('"','').replace('-;',';').split(',score')[0].replace(' ','_').split('(')[0][:-1]))
+                    merge_out.write('{}\n'.format(CleanTdecGff3Line(tdec_gene_dict[attribute_dict['Parent']])))
                     seen_tdec_genes.add(attribute_dict['Parent'])
 
                 # write putative ncRNA gene feature    
@@ -135,7 +181,7 @@ if __name__=="__main__":
                     seen_nc_genes.add(attribute_dict['Parent']) 
                 # write protein coding mRNA and associated child features    
                 if attribute_dict['ID'] in tdec_transcript_dict:
-                    merge_out.write('{}\n'.format(re.sub("\\^.*?\\^","",tdec_transcript_dict[attribute_dict['ID']]['mRNA'].split('|')[0]).replace('-','').replace('+','').replace('"','').split(',score')[0].replace(' ','_').split('(')[0][:-1]))
+                    merge_out.write('{}\n'.format(CleanTdecGff3Line(tdec_transcript_dict[attribute_dict['ID']]['mRNA'])))
                     for utr in tdec_transcript_dict[attribute_dict['ID']]['five_prime_UTR']:
                         merge_out.write(utr)
                     for exon in tdec_transcript_dict[attribute_dict['ID']]['exons']:
