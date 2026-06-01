@@ -16,7 +16,9 @@ rule star_1stpass:
     params:
         indexdir = config["star_index_dir"]
     resources:
-        runtime = 1920
+        mem_mb = lambda wildcards, attempt: int(64000 * (2 ** (attempt - 1))),
+        runtime = lambda wildcards, attempt: int(1920* (2 ** (attempt - 1))),
+        cpus_per_task = 8
     shell:
         """
         rm -rf results/star1stpass/{wildcards.sample}_1stpassSTARtmp
@@ -37,7 +39,9 @@ rule star_2ndpass:
     conda:
         "../envs/star.yml"
     resources:
-        runtime = 1920
+        mem_mb = lambda wildcards, attempt: int(64000 * (2 ** (attempt - 1))),
+        runtime = lambda wildcards, attempt: int(1920* (2 ** (attempt - 1))),
+        cpus_per_task = 8
     params:
         indexdir = config["star_index_dir"],
         tablestring = ' '.join(expand("results/star1stpass/{sample}_STAR1stpassSJ.out.tab", sample=SAMPLES))
@@ -61,7 +65,9 @@ rule samsort_star:
     conda:
         "../envs/samtools.yml"
     resources:
-        runtime = 360
+        mem_mb = lambda wildcards, attempt: int(24000 * (2 ** (attempt - 1))),
+        runtime = lambda wildcards, attempt: int(360* (2 ** (attempt - 1))),
+        cpus_per_task = 12
     shell:
         """
         rm -f results/star2ndpass/tmp/{wildcards.sample}.aln.sorted*bam

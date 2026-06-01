@@ -16,11 +16,15 @@ rule stringtie:
     conda:
         "../envs/stringtie.yml"
     resources:
-        runtime = 720
+        mem_mb = lambda wildcards, attempt: int(32000 * (2 ** (attempt - 1))),
+        runtime = lambda wildcards, attempt: int(720* (2 ** (attempt - 1))),
+        cpus_per_task = 4
+
     params:
         strandedness=(lambda s: '--rf' if s == 'rf' else ('--fr' if s == 'fr' else ''))(config['strandedness'])
     shell:
         "stringtie {input} -p {resources.cpus_per_task} {params.strandedness} -o {output}"
+
 rule stringtie_merge:
     input:
         expand("results/stringtie/{sample}_stringtie.gtf",sample=SAMPLES)
@@ -30,7 +34,10 @@ rule stringtie_merge:
     conda:
         "../envs/stringtie.yml"
     resources:
-        runtime = 360
+        mem_mb = lambda wildcards, attempt: int(20000 * (2 ** (attempt - 1))),
+        runtime = lambda wildcards, attempt: int(360* (2 ** (attempt - 1))),
+        cpus_per_task = 1
+
     shell:
        """
        for sample in {input}; do echo $sample >> {output.gtflist};done

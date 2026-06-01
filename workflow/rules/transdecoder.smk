@@ -13,7 +13,9 @@ rule build_transcriptome_fasta:
     conda:
         "../envs/transdecoder.yml"
     resources:
-        runtime = 60
+        mem_mb = lambda wildcards, attempt: int(5000 * (2 ** (attempt - 1))),
+        runtime = lambda wildcards, attempt: int(60* (2 ** (attempt - 1)))
+
     params:
         genome=config["genome"] 
     shell:
@@ -27,7 +29,8 @@ rule convert_gtf2gff3:
     conda:
         "../envs/transdecoder.yml"
     resources:
-        runtime = 60
+        mem_mb = lambda wildcards, attempt: int(5000 * (2 ** (attempt - 1))),
+        runtime = lambda wildcards, attempt: int(60* (2 ** (attempt - 1)))
     shell:
         "gtf_to_alignment_gff3.pl {input} > {output}"
 
@@ -66,7 +69,9 @@ rule blastp_longestorfs:
     conda:
         "../envs/blast.yml"
     resources:
-        runtime = 480
+        mem_mb = lambda wildcards, attempt: int(8000 * (2 ** (attempt - 1))),
+        runtime = lambda wildcards, attempt: int(480* (2 ** (attempt - 1))),
+        cpus_per_task = 16
     params:
         dbase=config["blastdbase"]
     shell:
@@ -96,7 +101,8 @@ rule transdecoder_predict:
     conda:
         "../envs/transdecoder.yml"
     resources:
-        runtime = 960
+        mem_mb = lambda wildcards, attempt: int(15000 * (2 ** (attempt - 1))),
+        runtime = lambda wildcards, attempt: int(960* (2 ** (attempt - 1)))
     shell:
         "TransDecoder.Predict -t {input.stringtie_fasta} --single_best_only --retain_blastp_hits {input.blasthits} -O results/transdecoder" 
 

@@ -14,9 +14,11 @@ rule star_index:
         "{}SA".format(config["star_index_dir"])
     conda:
         "../envs/star.yml"
-    threads: 24
+    #threads: 24
     resources:
-        runtime = 960
+        mem_mb = lambda wildcards, attempt: int(60000 * (2 ** (attempt - 1))),
+        runtime = lambda wildcards, attempt: int(2160* (2 ** (attempt - 1))),
+        cpus_per_task = 24
     params:
         nbases=get_star_SAindexNbases(),
         outdir=config["star_index_dir"]
