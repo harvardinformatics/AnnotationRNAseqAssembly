@@ -9,4 +9,4 @@ rule add_cds:
     conda:
         "../envs/gffread.yml"
     shell:
-         "python workflow/scripts/MergeNcRnaPredstoProteinCodingPreds.py -tdecgff3 {input.tdecgff3} -gtf {input.stiegtf}" 
+         '"$CONDA_PREFIX/bin/python" workflow/scripts/MergeNcRnaPredstoProteinCodingPreds.py -tdecgff3 {input.tdecgff3} -gtf {input.stiegtf}'

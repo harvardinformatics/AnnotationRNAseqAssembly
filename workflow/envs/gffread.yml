@@ -3,4 +3,5 @@ channels:
     - bioconda
 
 dependencies:
+    - python=3.12    
     - gffread==0.12.7
