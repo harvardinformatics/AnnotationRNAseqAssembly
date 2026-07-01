@@ -9,6 +9,7 @@
 
 module purge
 module load python
+eval "$(conda shell.bash hook)"
 conda activate snakemake
 
 conda_prefix=$1 # where to install conda environments, useful to avoid filling up home directory
@@ -16,7 +17,7 @@ global_snakemake_profile=$2 # this is the name of the directory for your global 
 
 snakemake --unlock --snakefile workflow/Snakefile --configfile config/config.yaml --use-conda --workflow-profile profiles/slurm --profile $global_snakemake_profile
 
-snakemake --conda-prefix $conda_prefix --snakefile workflow/Snakefile --configfile config/config.yaml --use-conda --workflow-profile profiles/slurm --profile cannon
+snakemake --conda-prefix $conda_prefix --snakefile workflow/Snakefile --configfile config/config.yaml --use-conda --retries 2 --jobs 200 --latency-wait 120 --workflow-profile profiles/slurm --profile cannon
 
 
 

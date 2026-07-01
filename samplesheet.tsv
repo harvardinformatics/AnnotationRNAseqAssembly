@@ -1,5 +1,13 @@
 sampleid	R1	R2
-SRR1765780	test/fastq/SRR1765780_1.fastq.gz	test/fastq/SRR1765780_2.fastq.gz
-SRR1767340	test/fastq/SRR1767340_1.fastq.gz	test/fastq/SRR1767340_2.fastq.gz
-SRR1767365	test/fastq/SRR1767365_1.fastq.gz	test/fastq/SRR1767365_2.fastq.gz
-SRR1767366	test/fastq/SRR1767366_1.fastq.gz	test/fastq/SRR1767366_2.fastq.gz
+R10-T1	../fastq/R10-T1_ecatesbiana_concat_R1.fastq.gz	../fastq/R10-T1_ecatesbiana_concat_R2.fastq.gz
+R11-T7	../fastq/R11-T7_ecatesbiana_concat_R1.fastq.gz	../fastq/R11-T7_ecatesbiana_concat_R2.fastq.gz
+R12-T11	../fastq/R12-T11_ecatesbiana_concat_R1.fastq.gz	../fastq/R12-T11_ecatesbiana_concat_R2.fastq.gz
+R1-H3	../fastq/R1-H3_ecatesbiana_concat_R1.fastq.gz	../fastq/R1-H3_ecatesbiana_concat_R2.fastq.gz
+R2-H8	../fastq/R2-H8_ecatesbiana_concat_R1.fastq.gz	../fastq/R2-H8_ecatesbiana_concat_R2.fastq.gz
+R3-H10	../fastq/R3-H10_ecatesbiana_concat_R1.fastq.gz	../fastq/R3-H10_ecatesbiana_concat_R2.fastq.gz
+R4-H1	../fastq/R4-H1_ecatesbiana_concat_R1.fastq.gz	../fastq/R4-H1_ecatesbiana_concat_R2.fastq.gz
+R5-H7	../fastq/R5-H7_ecatesbiana_concat_R1.fastq.gz	../fastq/R5-H7_ecatesbiana_concat_R2.fastq.gz
+R6-H11	../fastq/R6-H11_ecatesbiana_concat_R1.fastq.gz	../fastq/R6-H11_ecatesbiana_concat_R2.fastq.gz
+R7-T3	../fastq/R7-T3_ecatesbiana_concat_R1.fastq.gz	../fastq/R7-T3_ecatesbiana_concat_R2.fastq.gz
+R8-T8	../fastq/R8-T8_ecatesbiana_concat_R1.fastq.gz	../fastq/R8-T8_ecatesbiana_concat_R2.fastq.gz
+R9-T10	../fastq/R9-T10_ecatesbiana_concat_R1.fastq.gz	../fastq/R9-T10_ecatesbiana_concat_R2.fastq.gz

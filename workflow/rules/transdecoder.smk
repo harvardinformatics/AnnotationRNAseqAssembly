@@ -58,7 +58,7 @@ checkpoint split_longestorfs_fasta:
         "../envs/transdecoder.yml"
     shell:
        """
-        python workflow/scripts/FastaSplitter.py -f {input} -maxn 1000 -o {output}
+        "$CONDA_PREFIX/bin/python" workflow/scripts/FastaSplitter.py -f {input} -maxn 1000 -o {output}
         """
 
 rule blastp_longestorfs:
